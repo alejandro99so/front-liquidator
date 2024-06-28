@@ -5,6 +5,7 @@ import { useAccount, useConnections, useSignMessage } from 'wagmi'
 import { disconnect } from '@wagmi/core'
 import { config } from '../../config'
 import * as jose from 'jose'
+import './globals.css'
 
 
 export default function Home() {
@@ -15,18 +16,18 @@ export default function Home() {
 
   const validateSession = async () => {
     const jwt = sessionStorage.getItem("jwt")
-    const now = Math.floor(Date.now()/1000)
+    const now = Math.floor(Date.now() / 1000)
     if (jwt) {
 
-      try { 
+      try {
         const { payload } = await jose.jwtVerify(jwt, secret)
         if (payload.address == connections[0].accounts[0] && Number(payload.exp) < now) {
           return
         }
       } catch (ex: any) {
-        if (ex.code == 'ERR_JWT_EXPIRED') 
-          console.log({message: 'JWT_EXPIRED'})
-        else console.log({message: 'ERROR_GETTING_PAYLOAD'})
+        if (ex.code == 'ERR_JWT_EXPIRED')
+          console.log({ message: 'JWT_EXPIRED' })
+        else console.log({ message: 'ERROR_GETTING_PAYLOAD' })
       }
     }
     setNowSign(now);
@@ -39,7 +40,7 @@ export default function Home() {
     signMessage({ message: JSON.stringify(message) })
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     if (connections.length && connections[0].accounts.length) {
       console.log(connections[0].accounts[0])
       validateSession()
@@ -59,7 +60,7 @@ export default function Home() {
       body: JSON.stringify(data),
     })
     if (request) {
-      console.log({request: await request.json()})
+      console.log({ request: await request.json() })
     }
   }
 
@@ -72,10 +73,10 @@ export default function Home() {
 
   const createToken = async () => {
     const alg = 'HS256'
-    const token = await new jose.SignJWT({  
+    const token = await new jose.SignJWT({
       address: connections[0].accounts[0],
       signature: signMessageData,
-     })
+    })
       .setProtectedHeader({ alg })
       .setIssuedAt(nowSign)
       .setExpirationTime(nowSign + 3600)
@@ -90,21 +91,21 @@ export default function Home() {
         console.log("IS_NOT_POSIBLE_CONTINUE_WITHOUT_SIGN")
       }
       disconnect(config)
-      console.log({errorSigningMessage})
+      console.log({ errorSigningMessage })
     }
   }, [errorSigningMessage])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
+    <main className="main">
+      <div className="container">
+        <div>
           <w3m-button />
         </div>
       </div>
     </main>
   );
 }
+
+
+// 
+// MetaMask2312
