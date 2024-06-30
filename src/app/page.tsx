@@ -20,7 +20,8 @@ export default function Home() {
     if (jwt) {
 
       try {
-        const { payload } = await jose.jwtVerify(jwt, secret)
+        const { payload } = await jose.jwtVerify(jwt, secret);
+        sessionStorage.setItem("address", String(payload.address))
         if (payload.address == connections[0].accounts[0] && Number(payload.exp) < now) {
           return
         }
