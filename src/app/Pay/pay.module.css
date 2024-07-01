@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+.formContainer {
+  font-family: "Roboto Serif", serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 500px;
+  height: 75%;
+  margin: auto;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.inputGroup {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputGroup label {
+  flex: 0 0 30%;
+  margin-bottom: 0;
+  font-weight: bold;
+  white-space: nowrap;
+  text-align: start;
+}
+
+.inputGroup select,
+.inputGroup input,
+.inputGroup textarea {
+  width: 70%;
+  padding: 10px;
+  background: #fff;
+  border: none;
+  color: #000;
+  font-size: 16px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.totalInputContainer {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.totalInput {
+  border: none;
+  background: none;
+  padding: 10px;
+  flex: 1;
+  font-size: 16px;
+  color: #000;
+  border-radius: 5px;
+}
+
+.unit {
+  padding: 10px;
+  background: none;
+  color: #000;
+  border-left: 1px solid #ddd;
+}
+
+.textarea {
+  background: none;
+  border: none;
+  border-bottom: 2px solid #fff;
+  color: #fff;
+  font-size: 16px;
+  width: calc(70% - 10px);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.radio {
+  width: 20px !important;
+}
+.radioGroup {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+}
+
+.payButton {
+  background: #ffa500;
+  border: none;
+  padding: 10px 20px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.payButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.infoButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffa500;
+  position: absolute;
+  right: 10px;
+  top: 35px;
+}
+
+.rateInfo {
+  margin-top: 5px;
+  color: #9c9c9c;
+  font-size: 14px;
+  margin-right: 14%;
+}
+
+.confirmationCode {
+  margin-bottom: 20px;
+}
+.code {
+  font-family: "Roboto Mono", "Helvetica Neue", Helvetica, Arial;
+  font-size: 35px;
+  color: #ee911d;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+}
+
+.containerButtons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.totalInput:disabled,
+.select:disabled,
+.textarea:disabled,
+.radio:disabled,
+.totalInputContainer:disabled {
+  background-color: #b0b0b4;
+  color: #ffffff;
+  border-color: #d0d0d0;
+  cursor: not-allowed;
+}

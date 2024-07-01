@@ -6,6 +6,8 @@ import { disconnect } from '@wagmi/core'
 import { config } from '../../config'
 import * as jose from 'jose'
 import './globals.css'
+import { ButtonLink } from "@/components/Buttons/ButtonLink";
+import PageContainer from "@/components/PageContainer/PageContainer";
 
 
 export default function Home() {
@@ -13,6 +15,16 @@ export default function Home() {
   const { data: signMessageData, error: errorSigningMessage, signMessage } = useSignMessage()
   const connections = useConnections()
   const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_PRIVATE_KEY)
+  const account = useAccount();
+  const [currentPhrase, setCurrentPhrase] = useState("");
+
+  useEffect(() => {
+    fetch('/data-random.json')
+      .then(response => response.json())
+      .then(data => {
+        setCurrentPhrase(data[Math.floor(Math.random() * data.length)]);
+      });
+  }, []);
 
   const validateSession = async () => {
     const jwt = sessionStorage.getItem("jwt")
@@ -45,6 +57,7 @@ export default function Home() {
     if (connections.length && connections[0].accounts.length) {
       console.log(connections[0].accounts[0])
       validateSession()
+      console.log("Conntect?: ", connections[0].connector.onConnect)
     }
   }, [connections])
 
@@ -97,16 +110,15 @@ export default function Home() {
   }, [errorSigningMessage])
 
   return (
-    <main className="main">
-      <div className="container">
-        <div>
-          <w3m-button />
+    account.status === "connected" ?
+      <PageContainer>
+        <h1 className="title">LOGIN US</h1>
+        <p className="currentPhrase">{currentPhrase}</p>
+        <div className="containerButtons">
+          <ButtonLink href="/User" title="User" />
+          <ButtonLink href="/Liquidator" title="Liquidator" />
         </div>
-      </div>
-    </main>
+      </PageContainer> :
+      <div style={{ backgroundColor: "black" }}></div>
   );
 }
-
-
-// 
-// MetaMask2312

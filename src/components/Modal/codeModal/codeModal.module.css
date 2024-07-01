@@ -1,0 +1,26 @@
+.content {
+  font-family: "Roboto Flex", "Helvetica Neue", Helvetica, Arial;
+  display: flex;
+  flex-direction: row;
+  padding: 20% 0;
+}
+
+.codeInput {
+  background-color: transparent;
+  width: 50px;
+  border: none;
+  border-bottom: 2px #fff solid;
+  padding: 5px;
+  margin: 0 20px;
+  outline: none;
+  font-size: 40px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.containerButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

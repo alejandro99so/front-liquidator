@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400&family=Roboto+Serif:wght@400&display=swap");
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-end-rgb: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,44 +15,42 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-image: radial-gradient(circle, #24262d, #020617);
 }
-
+/* 
 .main {
+  width: 100vw;
   display: flex;
-  padding: 6rem;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 100vh;
+  justify-content: center;
+} */
+
+.title {
+  font-family: "Roboto Serif", serif;
+  font-size: 2.5rem;
+  color: #ee911d;
+  margin-bottom: 2rem;
 }
 
-.container {
-  z-index: 10;
-  justify-content: space-between;
-  align-items: center;
+.currentPhrase {
+  font-family: "Roboto Serif", serif;
+  color: #fff;
+  font-size: 1.2em;
+  font-style: italic;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.3;
+  white-space: pre-line;
+}
+
+.containerButtons {
   width: 100%;
-  max-width: 64rem;
-  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-    monospace;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-@media (min-width: 1024px) {
-  .container {
-    display: flex;
-  }
-  .container-button {
-    position: static;
-    background-image: none;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 @layer utilities {

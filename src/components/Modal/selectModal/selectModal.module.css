@@ -1,0 +1,41 @@
+.container {
+  font-family: "Roboto Flex", "Helvetica Neue", Helvetica, Arial;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.content {
+  display: flex;
+  flex-direction: row;
+  padding: 10% 0;
+  gap: 80px;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.button label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.preview {
+  margin-top: 20px;
+  max-width: 100%;
+  max-height: 300px;
+}
+
+.containerButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 55px;
+}
