@@ -1,0 +1,23 @@
+.container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--softTextColor);
+  box-shadow: 0px 5px 15px var(--softTextColor);
+
+  z-index: 9999;
+}
+
+.icon {
+  color: var(--softBg);
+  background-color: transparent;
+}

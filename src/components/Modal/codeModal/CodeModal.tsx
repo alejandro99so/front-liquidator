@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import Modal from '../Modal';
 import styles from './codeModal.module.css'
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
+import { useTranslation } from 'react-i18next';
 
 interface CodeModalProps {
     isOpen: boolean;
@@ -9,6 +10,7 @@ interface CodeModalProps {
 }
 
 const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose }) => {
+    const { t } = useTranslation(['user'])
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} title="Enter Code" onClose={onClose}>
+        <Modal isOpen={isOpen} title={t("code")} onClose={onClose}>
             <div className={styles.content}>
                 {[0, 1, 2, 3].map((_, index) => (
                     <input
@@ -48,8 +50,8 @@ const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose }) => {
                 ))}
             </div>
             <div className={styles.containerButtons}>
-                <ButtonAction onClick={onClose} title='Cancel' color='blue' />
-                <ButtonAction onClick={onClose} title='Accept' color='red' />
+                <ButtonAction onClick={onClose} title={t("cancel")} color='blue' />
+                <ButtonAction onClick={onClose} title={t("accept")} color='#ee911d' />
             </div>
         </Modal>
     );

@@ -8,6 +8,11 @@ import * as jose from 'jose'
 import './globals.css'
 import { ButtonLink } from "@/components/Buttons/ButtonLink";
 import PageContainer from "@/components/PageContainer/PageContainer";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
+import enDataRandom from "../../public/locales/en/data-random.json"
+import esDataRandom from "../../public/locales/es/data-random.json"
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
@@ -17,14 +22,45 @@ export default function Home() {
   const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_PRIVATE_KEY)
   const account = useAccount();
   const [currentPhrase, setCurrentPhrase] = useState("");
+  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const { t } = useTranslation(['home', 'data-random'])
+
+  const router = useRouter();
 
   useEffect(() => {
-    fetch('/data-random.json')
-      .then(response => response.json())
-      .then(data => {
-        setCurrentPhrase(data[Math.floor(Math.random() * data.length)]);
-      });
+    const checkSession = async () => {
+      const jwt = sessionStorage.getItem("jwt");
+      if (!jwt) {
+        router.push('/');
+      } else {
+        try {
+          const { payload } = await jose.jwtVerify(jwt, secret);
+          if (payload.exp < Math.floor(Date.now() / 1000)) {
+            sessionStorage.removeItem("jwt");
+            router.push('/');
+          }
+        } catch (ex) {
+          sessionStorage.removeItem("jwt");
+          router.push('/');
+        }
+      }
+    };
+    checkSession();
+  }, [router]);
+
+  useEffect(() => {
+    const dataRandom = i18n.language === 'es' ? esDataRandom : enDataRandom;
+    const index = Math.floor(Math.random() * dataRandom.length);
+    setCurrentPhrase(dataRandom[index]);
+    setCurrentIndex(index);
   }, []);
+
+  useEffect(() => {
+    if (currentIndex !== null) {
+      const dataRandom = i18n.language === 'es' ? esDataRandom : enDataRandom;
+      setCurrentPhrase(dataRandom[currentIndex]);
+    }
+  }, [i18n.language]);
 
   const validateSession = async () => {
     const jwt = sessionStorage.getItem("jwt")
@@ -110,15 +146,13 @@ export default function Home() {
   }, [errorSigningMessage])
 
   return (
-    account.status === "connected" ?
-      <PageContainer>
-        <h1 className="title">LOGIN US</h1>
-        <p className="currentPhrase">{currentPhrase}</p>
-        <div className="containerButtons">
-          <ButtonLink href="/User" title="User" />
-          <ButtonLink href="/Liquidator" title="Liquidator" />
-        </div>
-      </PageContainer> :
-      <div style={{ backgroundColor: "black" }}></div>
+    <PageContainer>
+      <h1 className="title">{t("loginus")}</h1>
+      <p className="currentPhrase">{currentPhrase}</p>
+      <div className="containerButtons">
+        <ButtonLink href="/User" title={t("buttonUser")} />
+        <ButtonLink href="/Liquidator" title={t("buttonLiquidator")} />
+      </div>
+    </PageContainer>
   );
 }

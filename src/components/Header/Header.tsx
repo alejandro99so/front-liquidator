@@ -1,13 +1,16 @@
 import Image from 'next/image';
 import styles from './header.module.css';
 import Link from 'next/link';
+import LanguageSwitcher from '../Language/LanguageSwitcher';
+import Logo from '../Logo';
 export const Header = () => {
     return (
         <header className={styles.container}>
             <Link href={"/"} className={styles.logo}>
-                <Image src={"/logo.svg"} alt='logo.svg' width={190} height={80} />
+                <Logo />
             </Link>
             <div className={styles.button}>
+                <LanguageSwitcher />
                 <w3m-button />
             </div>
         </header>

@@ -1,0 +1,20 @@
+{
+  "method": "Método",
+  "rate": "Tasa",
+  "account": "N° de Cuenta",
+  "note": "Nota",
+  "select": "Seleccionar",
+  "camera": "Cámara",
+  "gallery": "Galeria",
+  "cancel": "Cancelar",
+  "accept": "Aceptar",
+  "qr_code": "Código QR",
+  "qr_select": "No se ha seleccionado código QR",
+  "bank": "Banco",
+  "type": "Tipo de Cuenta",
+  "continue": "Continuar",
+  "select_bank": "Seleccionar Banco",
+  "select_type_account": "Seleccionar Tipo de Cuenta",
+  "pay": "Pagar",
+  "code": "Código"
+}

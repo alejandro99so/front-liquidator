@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './selectModal.module.css';
 import Modal from '../Modal';
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
+import { useTranslation } from 'react-i18next';
 
 interface SelectModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface SelectModalProps {
 }
 
 const SelectModal: React.FC<SelectModalProps> = ({ isOpen, onClose, onImageSelect }) => {
+    const { t } = useTranslation(['pay'])
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -73,21 +75,21 @@ const SelectModal: React.FC<SelectModalProps> = ({ isOpen, onClose, onImageSelec
     };
 
     return (
-        <Modal isOpen={isOpen} title="Select" onClose={onClose}>
+        <Modal isOpen={isOpen} title={t("select")} onClose={onClose}>
             <div className={styles.container}>
                 <div className={styles.content}>
                     <button className={styles.button} onClick={handleCameraClick}>
                         <Image src="/Camera.svg" alt='Camera.svg' width={100} height={100} />
-                        <label>Camera</label>
+                        <label>{t("camera")}</label>
                     </button>
                     <button className={styles.button} onClick={handleGalleryClick}>
                         <Image src="/Galery.svg" alt='Galery.svg' width={100} height={100} />
-                        <label>Gallery</label>
+                        <label>{t("gallery")}</label>
                     </button>
                 </div>
 
                 <div className={styles.containerButtons}>
-                    <ButtonAction title='Cancel' color='red' onClick={onClose} />
+                    <ButtonAction title={t("cancel")} color='red' onClick={onClose} />
                 </div>
                 {isCameraOpen && (
                     <div className={styles.cameraContainer}>

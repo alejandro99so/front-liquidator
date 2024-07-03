@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import Modal from '../Modal';
 import styles from './InfoBankModal.module.css'
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
+import { useTranslation } from 'react-i18next';
 interface InfoBankModalProps {
     isOpen: boolean;
     onClose: (data?: { bank: string; typeAccount: string; nAccount: string }) => void;
 }
 
 const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
+    const { t } = useTranslation(['pay'])
+
     const [form, setForm] = useState({
         bank: '',
         typeAccount: '',
@@ -39,24 +42,24 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
         <Modal isOpen={isOpen} title="" onClose={onClose}>
             <div className={styles.content}>
                 <div className={styles.inputGroup}>
-                    <label>Bank:</label>
+                    <label>{t("bank")}:</label>
                     <select className={styles.select} name="bank" value={form.bank} onChange={handleInputChange}>
-                        <option value="">Select bank</option>
+                        <option value="">{t("select_bank")}</option>
                         <option value="Bancolombia">Bancolombia</option>
                         <option value="Banco BBVA">Banco BBVA</option>
                         <option value="Banco Agrario">Banco Agrario</option>
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
-                    <label>Type Account:</label>
+                    <label>{t("type")}:</label>
                     <select className={styles.select} name="typeAccount" value={form.typeAccount} onChange={handleTypeChange}>
-                        <option value="">Select type account</option>
+                        <option value="">{t("select_type_account")}</option>
                         <option value="Ahorros">Ahorros</option>
                         <option value="Corriente">Corriente</option>
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
-                    <label>N° Account:</label>
+                    <label>{t("account")}:</label>
                     <input
                         type="number"
                         name="nAccount"
@@ -68,8 +71,8 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
                 </div>
             </div>
             <div className={styles.containerButtons}>
-                <ButtonAction onClick={onClose} title='Cancel' color='red' />
-                <ButtonAction onClick={handleAccept} title='Accept' color='#f28c1f' />
+                <ButtonAction onClick={onClose} title={t("cancel")} color='red' />
+                <ButtonAction onClick={handleAccept} title={t("accept")} color='#f28c1f' />
             </div>
         </Modal>
     );

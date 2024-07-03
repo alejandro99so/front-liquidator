@@ -70,7 +70,7 @@
   padding: 10px;
   background: none;
   color: #000;
-  border-left: 1px solid #ddd;
+  /* border-left: 1px solid #ddd; */
 }
 
 .textarea {
@@ -154,4 +154,8 @@
   color: #ffffff;
   border-color: #d0d0d0;
   cursor: not-allowed;
+}
+
+.totalInputContainer.disabled {
+  background-color: #b0b0b4;
 }

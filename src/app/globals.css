@@ -1,43 +1,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400&family=Roboto+Serif:wght@400&display=swap");
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 0, 0, 0;
+  --bg: white;
+  --textColor: black;
+  --softBg: #f0f0f0;
+  --softTextColor: #161616;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.dark {
+  --bg: #0f172a;
+  --textColor: #fafafa;
+  --softBg: #1f273a;
+  --softTextColor: #f1f1f1;
+}
+
+.light {
+  --bg: white;
+  --textColor: #0d0d0d;
+  --softBg: #f0f0f0;
+  --softTextColor: #161616;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI";
-  color: rgb(var(--foreground-rgb));
-  background-image: radial-gradient(circle, #24262d, #020617);
 }
-/* 
-.main {
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-} */
 
 .title {
   font-family: "Roboto Serif", serif;
   font-size: 2.5rem;
-  color: #ee911d;
+  color: var(--softTextColor);
   margin-bottom: 2rem;
 }
 
 .currentPhrase {
   font-family: "Roboto Serif", serif;
-  color: #fff;
+  color: var(--softTextColor);
   font-size: 1.2em;
   font-style: italic;
   max-width: 600px;
@@ -56,5 +55,13 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@media (width < 450px) {
+  .currentPhrase {
+  }
+  .containerButtons {
+    flex-direction: column;
   }
 }

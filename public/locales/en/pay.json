@@ -1,0 +1,20 @@
+{
+  "method": "Method",
+  "rate": "Rate",
+  "account": "N° Account",
+  "note": "Note",
+  "select": "Select",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "cancel": "Cancel",
+  "accept": "Accept",
+  "qr_code": "QR Code",
+  "qr_select": "No QR code selected",
+  "bank": "Bank",
+  "type": "Type Account",
+  "continue": "Continue",
+  "select_bank": "Select Bank",
+  "select_type_account": "Select Type Account",
+  "pay": "Pay",
+  "code": "Code"
+}

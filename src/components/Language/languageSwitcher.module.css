@@ -1,0 +1,26 @@
+.container {
+  max-width: 250px;
+  position: relative;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 7px 10px;
+  height: 42px;
+  outline: 0;
+  background-color: transparent;
+  font-size: 1em;
+  color: var(--softTextColor);
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.select::-ms-expand {
+  display: none;
+}

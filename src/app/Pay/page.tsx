@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { ButtonLink } from '@/components/Buttons/ButtonLink';
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 interface FormState {
     red: string;
@@ -25,6 +26,8 @@ interface BankDetails {
 }
 
 const PayPage = () => {
+    const { t } = useTranslation(['pay'])
+
     const [form, setForm] = useState<FormState>({
         red: 'Base',
         token: 'USDC',
@@ -149,7 +152,7 @@ const PayPage = () => {
                 {confirmationCode && (
                     <div className={styles.confirmationCode}>
                         <div>
-                            <label className={styles.code}> Code: {confirmationCode}</label>
+                            <label className={styles.code}> {t("code")}: {confirmationCode}</label>
                         </div>
                         <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
                             <span>Message:</span>
@@ -180,7 +183,9 @@ const PayPage = () => {
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Total:</label>
-                    <div className={styles.totalInputContainer}>
+                    <div
+                        className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}
+                    >
                         <input
                             type="number"
                             name="total"
@@ -196,7 +201,9 @@ const PayPage = () => {
                 <div>
                     <div className={styles.inputGroup}>
                         <label>Total Token:</label>
-                        <div className={styles.totalInputContainer}>
+                        <div
+                            className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}
+                        >
                             <input
                                 type="number"
                                 name="totalToken"
@@ -216,7 +223,7 @@ const PayPage = () => {
                     )}
                 </div>
                 <div className={styles.inputGroup}>
-                    <label>Method:</label>
+                    <label>{t("method")}:</label>
                     <div className={styles.radioGroup}>
                         <label>
                             <input
@@ -227,7 +234,7 @@ const PayPage = () => {
                                 checked={form.method === 'QR'}
                                 onChange={handleRadioChange}
                                 disabled={!isEditing}
-                            /> QR
+                            /> {t("qr_code")}
                         </label>
                         <label>
                             <input
@@ -238,18 +245,18 @@ const PayPage = () => {
                                 checked={form.method === 'Account'}
                                 onChange={handleRadioChange}
                                 disabled={!isEditing}
-                            /> N° Account
+                            /> {t("account")}
                         </label>
                     </div>
                 </div>
                 {form.method === 'QR' && (
                     <div className={styles.details}>
                         <div className={styles.inputGroup}>
-                            <label>QR Code:</label>
+                            <label>{t("qr_code")}:</label>
                             {qrCode ? (
                                 <Image src={qrCode} alt="QR Code" width={200} height={200} className={styles.qrImage} />
                             ) : (
-                                <span>No QR code selected</span>
+                                <span>{t("qr_select")}</span>
                             )}
                         </div>
                     </div>
@@ -257,7 +264,7 @@ const PayPage = () => {
                 {form.method === 'Account' && (
                     <div className={styles.details}>
                         <div className={styles.inputGroup}>
-                            <label>Bank:</label>
+                            <label>{t("bank")}:</label>
                             <input
                                 type="text"
                                 name="bank"
@@ -269,7 +276,7 @@ const PayPage = () => {
                             />
                         </div>
                         <div className={styles.inputGroup}>
-                            <label>Type Account:</label>
+                            <label>{t("type")}:</label>
                             <input
                                 type="text"
                                 name="typeAccount"
@@ -281,7 +288,7 @@ const PayPage = () => {
                             />
                         </div>
                         <div className={styles.inputGroup}>
-                            <label>N° Account:</label>
+                            <label>{t("account")}:</label>
                             <input
                                 type="text"
                                 name="nAccount"
@@ -295,7 +302,7 @@ const PayPage = () => {
                     </div>
                 )}
                 <div className={styles.inputGroup}>
-                    <label>Note:</label>
+                    <label>{t("note")}:</label>
                     <textarea
                         rows={5}
                         name="note"
@@ -306,12 +313,12 @@ const PayPage = () => {
                     </textarea>
                 </div>
                 {isEditing ? (
-                    <button className={styles.payButton} disabled={!isFormValid} aria-disabled={!isFormValid} onClick={handleContinue}>Continue</button>
+                    <button className={styles.payButton} disabled={!isFormValid} aria-disabled={!isFormValid} onClick={handleContinue}>{t("continue")}</button>
                 ) : (
                     <>
                         <div className={styles.containerButtons}>
-                            <ButtonAction onClick={handleCancel} title="Cancel" color='red' />
-                            <ButtonLink href="/Pay" title="Pay" />
+                            <ButtonAction onClick={handleCancel} title={t("cancel")} color='red' />
+                            <ButtonLink href="/Pay" title={t("pay")} />
                         </div>
                     </>
                 )}
