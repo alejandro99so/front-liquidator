@@ -10,6 +10,7 @@ import { Header } from '@/components/Header/Header'
 import { ThemeContextProvider } from '@/context/ThemeContext'
 import ThemeProvider from '@/providers/ThemeProvider'
 import ThemeSwitcher from '@/components/themeSwitcher/ThemeSwitcher'
+import { Footer } from '@/components/Footer/Footer'
 
 export const metadata: Metadata = {
   title: 'Flows.Money',
@@ -27,9 +28,14 @@ export default function RootLayout({
       <body>
         <ThemeContextProvider>
           <ThemeProvider>
-            <Header />
-            <Web3ModalProvider initialState={initialState}>{children}</Web3ModalProvider>
-            <ThemeSwitcher />
+            <div className='containerMain'>
+              <Header />
+              <main>
+                <Web3ModalProvider initialState={initialState}>{children}</Web3ModalProvider>
+              </main>
+              <Footer />
+              <ThemeSwitcher />
+            </div>
           </ThemeProvider>
         </ThemeContextProvider>
       </body>

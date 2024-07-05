@@ -1,0 +1,136 @@
+.heroSection {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 900px;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  background-color: var(--softBg);
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+#circle1 {
+  width: 450px;
+  height: 450px;
+  border-radius: 450px;
+  filter: blur(25px);
+  top: 0px;
+  right: 230px;
+  background-color: var(--circle1Color);
+}
+
+#circle2 {
+  width: 450px;
+  height: 450px;
+  border-radius: 500px;
+  filter: blur(25px);
+  top: 390px;
+  right: 140px;
+  background-color: var(--circle2Color);
+}
+
+#circle3 {
+  width: 450px;
+  height: 450px;
+  border-radius: 450px;
+  filter: blur(20px);
+  top: 753px;
+  right: 720px;
+  background-color: var(--circle3Color);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+.content h1 {
+  font-size: 64px;
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+.content p {
+  font-size: 16px;
+  font-weight: 300;
+  margin: 20px 0;
+}
+
+.paragraphContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.paragraphContainer span {
+  border: 2px solid #00a4d8;
+  height: 60px;
+}
+
+.paragraphContainer p {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 20px;
+  width: 52%;
+  padding-left: 15px;
+}
+
+.buttonInfoContainer {
+  position: relative;
+  display: flex;
+  align-items: start;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.viewServicesButton {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--softTextColor);
+  color: var(--softBg);
+  border: none;
+  cursor: pointer;
+  width: 205px;
+  height: 50px;
+  border-radius: 20px;
+  font-size: 22px;
+}
+
+.infoBox {
+  /* padding: 10px; */
+  width: 555px;
+  position: absolute;
+  color: var(--softTextColor);
+  left: 465px;
+}
+
+.popular {
+  display: flex;
+  flex-direction: column;
+}
+
+.cryptoInfo {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.cryptoInfo div {
+  flex: 1;
+  text-align: center;
+}
+
+@media (width < 1024px) {
+  .content h1 {
+    text-align: center;
+  }
+}

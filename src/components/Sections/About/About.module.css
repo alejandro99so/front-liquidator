@@ -1,0 +1,63 @@
+.aboutUsSection {
+  text-align: center;
+  padding: 50px 20px;
+  position: relative;
+  padding-top: 100px;
+  background-color: var(--softBg);
+}
+
+.aboutUsSection h2 {
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.aboutUsSection p {
+  font-size: 36px;
+  font-weight: 300;
+  margin-bottom: 40px;
+  max-width: 1160px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.imagesContainer {
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  position: relative;
+  z-index: 1;
+}
+
+.imageBox {
+  background-color: transparent;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.imageBox img {
+  display: block;
+}
+
+.imageLabel {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.backgroundStripe {
+  position: absolute;
+  top: 610px;
+  left: 0px;
+  width: 100%;
+  height: 20%;
+  background-color: #00a99d;
+  transform: skewY(-14deg);
+  z-index: 0;
+}

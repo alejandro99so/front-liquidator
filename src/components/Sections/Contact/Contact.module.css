@@ -1,0 +1,111 @@
+.contactSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 100px;
+  background-color: var(--softBg);
+}
+
+.contactSection h2 {
+  font-size: 40px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.contactSection p {
+  font-size: 24px;
+  margin-bottom: 20px;
+  width: 54%;
+}
+
+.liquidator,
+.user {
+  background-image: linear-gradient(to right, #0ef1ff, #6100ff);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.user {
+  background-image: linear-gradient(to right, #7000ff, #ff007a);
+}
+
+.contactForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.leftPanel {
+  flex: 1;
+  background-color: #00a99d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  height: 512px;
+}
+
+.rightPanel {
+  flex: 1;
+  background-color: #666666;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formHeader {
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.formGroup,
+.term {
+  margin-bottom: 20px;
+}
+
+.formGroup label,
+.term label {
+  display: block;
+  color: #ffffff;
+  text-align: start;
+  margin-bottom: 5px;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="email"],
+.formGroup textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+}
+
+.formGroup input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.term {
+  display: flex;
+  align-items: flex-start;
+}
+
+.submitButton {
+  background-color: #00a99d;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
