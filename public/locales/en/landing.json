@@ -1,0 +1,51 @@
+{
+  "heroSection": {
+    "title": "The Future Of Transactions",
+    "start": "¡Starts Now!",
+    "paragraph": "With Flows.money, manage your money easier. You can pay with your crypto anywhere with just two clicks.",
+    "viewServicesButton": "View Services >",
+    "infoBox": {
+      "popular": "Popular",
+      "moreCurrencies": "Ver las más de 350 monedas >"
+    }
+  },
+
+  "servicesSection": {
+    "title": "Become one of our allies and be a liquidator and",
+    "increase": "increase your profits",
+    "subtitle": "Learn about the benefits as a liquidator.",
+    "readMoreButton": "Read More",
+    "find": "Find the best price with our nationally qualified liquidators.",
+    "price": "Find The Perfect Price."
+  },
+
+  "aboutSection": {
+    "title": "About Us",
+    "description": "We are committed to making cryptocurrency payments accessible, secure, and convenient, allowing our users to transact in their original currency with complete confidence. Welcome to the new era of digital payments with flows.money!",
+    "imageDescriptions": {
+      "security": "Security",
+      "speed": "Speed",
+      "efficiency": "Efficiency"
+    }
+  },
+  "contactSection": {
+    "title": "Contact Us",
+    "titleFirst": "Be part of us as a",
+    "liquidator": "liquidator",
+    "or": "or",
+    "user": "user",
+    "titleSecond": "and receive additional information about our services.",
+    "form": {
+      "fullName": "FULL NAME",
+      "fullNamePlaceholder": "Enter your full name",
+      "phone": "PHONE",
+      "phonePlaceholder": "Choose a phone",
+      "email": "E-MAIL",
+      "emailPlaceholder": "Your e-mail goes here",
+      "message": "MESSAGE",
+      "messagePlaceholder": "Enter your message",
+      "agree": "I agree all yes",
+      "submit": "Submit"
+    }
+  }
+}

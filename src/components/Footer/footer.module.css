@@ -1,13 +1,10 @@
 .container {
   display: flex;
-  position: fixed;
-  top: 0;
   width: 100%;
   justify-content: space-evenly;
-  align-items: center;
   padding: 10px 0px;
-  background-color: var(--softBg);
-  opacity: 0.9;
+  background-color: #013646;
+  gap: 100px;
   z-index: 1000;
 }
 
@@ -18,28 +15,32 @@
 }
 
 .menu {
-  gap: 50px;
+  gap: 20px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  flex-direction: column;
 }
 
 .menu > li {
   list-style: none;
 }
 
+.containerSocial {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
 .link {
   font-family: "Readex Pro", sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 18.75px;
   text-decoration: none;
-  color: var(--softTextColor);
+  color: #fff;
 }
 
 .button {
   gap: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
