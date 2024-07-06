@@ -12,7 +12,7 @@ export const Footer = () => {
     return (
         <footer className={styles.container}>
             <Link href={"/"} className={styles.logo}>
-                <Image src={"/logo-light.svg"} alt='logo' width={190} height={80} />
+                <Image src={"/buckspay-text-light.png"} alt='logo' width={190} height={60} />
             </Link>
             <div></div>
             <div className={styles.containerSocial}>

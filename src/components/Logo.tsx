@@ -13,8 +13,8 @@ const Logo = () => {
     const { theme } = context;
 
     const icon = theme === "dark"
-        ? <Image src="/logo-light.svg" alt="logo-light.svg" width={190} height={80} />
-        : <Image src="/logo-dark.svg" alt="logo-dark.svg" width={190} height={80} />
+        ? <Image src="/buckspay-text-light.png" alt="buckspay-text-light.png" width={190} height={60} />
+        : <Image src="/buckspay-text-dark.png" alt="buckspay-text-dark.png" width={190} height={60} />
 
     return icon;
 };
