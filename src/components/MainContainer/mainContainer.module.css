@@ -1,13 +1,8 @@
 .container {
-  background-color: var(--softBg);
+  background-color: var(--bg);
+  background-image: var(--radialGradient1), var(--radialGradient2);
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-
-@media (width > 1440px) {
-  .container {
-    max-width: 1440px;
-  }
+  align-items: start;
 }

@@ -1,16 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap");
 
 :root {
-  --bg: white;
-  --textColor: black;
+  --textColor: #000;
   --softBg: #f0f0f0;
   --softTextColor: #161616;
 }
 
 .dark {
-  --bg: #0f172a;
-  --textColor: #fafafa;
-  --softBg: #000000;
+  --textColor: #fff;
+  --softBg: #000;
+  --radialGradient1: radial-gradient(at 43% 100%, #a3a3a3 0px, transparent 50%);
+  --radialGradient2: radial-gradient(at 63% 100%, #4400ff 0px, transparent 50%);
   --softTextColor: #f1f1f1;
   --circle1Color: #196520;
   --circle2Color: #19777d;
@@ -18,9 +18,10 @@
 }
 
 .light {
-  --bg: white;
   --textColor: #0d0d0d;
   --softBg: #fff;
+  --radialGradient1: radial-gradient(at 43% 100%, #c0c0c0 0px, transparent 50%);
+  --radialGradient2: radial-gradient(at 63% 100%, #add8e6 0px, transparent 50%);
   --softTextColor: #161616;
   --circle1Color: #b6f6bc;
   --circle2Color: #6adee5;

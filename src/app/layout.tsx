@@ -13,7 +13,7 @@ import ThemeSwitcher from '@/components/themeSwitcher/ThemeSwitcher'
 import { Footer } from '@/components/Footer/Footer'
 
 export const metadata: Metadata = {
-  title: 'Flows.Money',
+  title: 'BucksPay',
   description: 'Easy Pay'
 }
 

@@ -16,5 +16,9 @@
   "select_bank": "Seleccionar Banco",
   "select_type_account": "Seleccionar Tipo de Cuenta",
   "pay": "Pagar",
-  "code": "Código"
+  "code": "Código",
+  "takePhoto": "Tomar Foto",
+  "redoPhoto": "Rehacer Foto",
+  "selectAnother": "Seleccionar Otra",
+  "savePhoto": "Guardar Foto"
 }

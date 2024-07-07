@@ -1,7 +1,7 @@
 "use client"
 import PageContainer from '@/components/PageContainer/PageContainer';
 import styles from './pay.module.css';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import SelectModal from '@/components/Modal/selectModal/SelectModal';
 import InfoBankModal from '@/components/Modal/infoBankModal/InfoBankModal';
 import Image from 'next/image';
@@ -40,16 +40,15 @@ const PayPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [rate, setRate] = useState<number | null>(null);
-
+    const [qrCode, setQrCode] = useState<string | null>(null);
+    const [qrCodeData, setQrCodeData] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(true);
+    const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
     const [bankDetails, setBankDetails] = useState<BankDetails>({
         bank: '',
         typeAccount: '',
         nAccount: ''
     });
-
-    const [qrCode, setQrCode] = useState<string | null>(null);
-    const [isEditing, setIsEditing] = useState(true);
-    const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
 
     useEffect(() => {
         const { total, totalToken, method } = form;
@@ -105,6 +104,7 @@ const PayPage = () => {
 
         if (value === 'QR') {
             setQrCode(null);  // Reset QR code
+            setQrCodeData(null);
         } else if (value === 'Account') {
             setBankDetails({ bank: '', typeAccount: '', nAccount: '' });  // Reset bank details
         }
@@ -112,11 +112,10 @@ const PayPage = () => {
         setIsModalOpen(true);
     }, []);
 
+
     const handleModalClose = (data?: BankDetails) => {
         setIsModalOpen(false);
-        if (form.method === 'QR') {
-            setQrCode(data?.bank || null);
-        } else if (form.method === 'Account' && data) {
+        if (form.method === 'Account' && data) {
             setBankDetails(data);
         }
     };
@@ -124,6 +123,10 @@ const PayPage = () => {
     const handleImageSelect = (image: string) => {
         setQrCode(image);
         setIsModalOpen(false);
+    };
+
+    const handleQrCodeDetected = (data: string) => {
+        setQrCodeData(data);
     };
 
     const handleContinue = () => {
@@ -146,6 +149,38 @@ const PayPage = () => {
         setIsEditing(true);
     };
 
+    const handlePay = async () => {
+        const paymentDetails = {
+            red: form.red,
+            token: form.token,
+            total: form.total,
+            totalToken: form.totalToken,
+            method: form.method,
+            note: form.note,
+            ...(form.method === 'QR' ? { qrCodeData } : bankDetails)
+        };
+        console.log("Payment Details:", paymentDetails);
+
+        // try {
+        //     const response = await fetch('/api/payment', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(paymentDetails)
+        //     });
+
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+
+        //     const result = await response.json();
+        //     console.log('Payment successful:', result);
+        // } catch (error) {
+        //     console.error('Payment failed:', error);
+        // }
+    };
+
     return (
         <PageContainer>
             <div className={styles.formContainer}>
@@ -157,7 +192,7 @@ const PayPage = () => {
                         <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
                             <span>Message:</span>
                             <Link href={"/Room"}>
-                                <Image src={"/message.svg"} alt='' width={20} height={20} />
+                                <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
                             </Link>
                         </div>
                     </div>
@@ -176,16 +211,14 @@ const PayPage = () => {
                 <div className={styles.inputGroup}>
                     <label>Token:</label>
                     <select className={styles.select} name="token" value={form.token} onChange={handleTokenChange} disabled={!isEditing}>
-                        <option value="DAI">DAI</option>
                         <option value="USDC">USDC</option>
+                        <option value="DAI">DAI</option>
                         <option value="USDT">USDT</option>
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Total:</label>
-                    <div
-                        className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}
-                    >
+                    <div className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}>
                         <input
                             type="number"
                             name="total"
@@ -195,15 +228,13 @@ const PayPage = () => {
                             required
                             disabled={!isEditing}
                         />
-                        <span className={styles.unit}>COP</span>
+                        <span className={`${styles.unit} ${!isEditing ? styles.disabled : ''}`}>COP</span>
                     </div>
                 </div>
                 <div>
                     <div className={styles.inputGroup}>
                         <label>Total Token:</label>
-                        <div
-                            className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}
-                        >
+                        <div className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}>
                             <input
                                 type="number"
                                 name="totalToken"
@@ -213,13 +244,14 @@ const PayPage = () => {
                                 required
                                 disabled={!isEditing}
                             />
-                            <span className={styles.unit}>{form.token}</span>
+                            <span className={`${styles.unit} ${!isEditing ? styles.disabled : ''}`}>{form.token}</span>
                         </div>
                     </div>
                     {rate !== null && (
-                        <span className={styles.rateInfo}>
-                            Rate: {rate.toFixed(2)} COP
-                        </span>
+                        <div className={styles.rateInfoContainer}>
+                            <span className={styles.rateLabel}>Rate:</span>
+                            <span className={styles.rateValue}>{rate.toFixed(2)} COP</span>
+                        </div>
                     )}
                 </div>
                 <div className={styles.inputGroup}>
@@ -255,6 +287,7 @@ const PayPage = () => {
                             <label>{t("qr_code")}:</label>
                             {qrCode ? (
                                 <Image src={qrCode} alt="QR Code" width={200} height={200} className={styles.qrImage} />
+                                // <span>{qrCodeData}</span>
                             ) : (
                                 <span>{t("qr_select")}</span>
                             )}
@@ -317,13 +350,13 @@ const PayPage = () => {
                 ) : (
                     <>
                         <div className={styles.containerButtons}>
-                            <ButtonAction onClick={handleCancel} title={t("cancel")} color='red' />
-                            <ButtonLink href="/Pay" title={t("pay")} />
+                            <ButtonAction onClick={handleCancel} title={t("cancel")} color='#313131' />
+                            <ButtonLink href="/Building" title={t("pay")} color='#1F046B' onClick={handlePay} />
                         </div>
                     </>
                 )}
                 {isModalOpen && form.method === 'QR' && (
-                    <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} />
+                    <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} onQrCodeDetected={handleQrCodeDetected} />
                 )}
                 {isModalOpen && form.method === 'Account' && (
                     <InfoBankModal isOpen={isModalOpen} onClose={handleModalClose} />

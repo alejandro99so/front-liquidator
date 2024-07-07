@@ -2,13 +2,12 @@
 import PageContainer from '@/components/PageContainer/PageContainer'
 import styles from './user.module.css'
 import { useState, useEffect } from 'react';
-import { ButtonLink } from '@/components/Buttons/ButtonLink';
-import { ButtonAction } from '@/components/Buttons/ButtonAction';
 import CodeModal from '@/components/Modal/codeModal/CodeModal';
 import { useTranslation } from 'react-i18next';
 import i18n from "../../i18n";
 import enDataRandom from "../../../public/locales/en/phrase-random.json"
 import esDataRandom from "../../../public/locales/es/phrase-random.json"
+import Link from 'next/link';
 
 interface Phrase {
     quote: string;
@@ -48,16 +47,21 @@ const UserPage = () => {
 
     return (
         <PageContainer>
-            <h1>{t("welcome")} <span className={styles.flows}>Flows.money</span> 🫶🏻</h1>
+            <h1 className={styles.title}>{t("welcome")} <span className={styles.flows}>BucksPay</span> 🫶🏻</h1>
             <div className={styles.container}>
                 <p className={styles.quote}>{currentPhrase?.quote}</p>
                 {currentPhrase?.author &&
                     <p className={styles.author}>- {currentPhrase?.author}</p>
                 }
             </div>
+
             <div className={styles.containerButtons}>
-                <ButtonLink href="/Pay" title={t("buttonPay")} />
-                <ButtonAction onClick={() => setIsCodeModalOpen(true)} title={t("buttonJoin")} />
+                <Link className={`${styles.button} ${styles.buttonPay}`} href="/Pay">
+                    {t("buttonPay")}
+                </Link>
+                <button className={`${styles.button} ${styles.buttonJoin}`} onClick={() => setIsCodeModalOpen(true)}>
+                    {t("buttonJoin")}
+                </button>
             </div>
             <CodeModal isOpen={isCodeModalOpen} onClose={() => setIsCodeModalOpen(false)} />
         </PageContainer>

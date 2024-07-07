@@ -4,7 +4,7 @@
   align-items: center;
   width: 170px;
   height: 60px;
-  background-color: #f28c1f;
+  background-color: #1f046b;
   border-radius: 20px;
 }
 
@@ -21,6 +21,5 @@
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: bold;
-  font-family: "Roboto Flex", "Helvetica Neue", Helvetica, Arial;
   cursor: pointer;
 }

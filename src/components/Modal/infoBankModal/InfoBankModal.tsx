@@ -35,7 +35,6 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
 
     const handleAccept = () => {
         onClose(form);
-        console.log({ form });
     };
 
     return (
@@ -71,8 +70,8 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
                 </div>
             </div>
             <div className={styles.containerButtons}>
-                <ButtonAction onClick={onClose} title={t("cancel")} color='red' />
-                <ButtonAction onClick={handleAccept} title={t("accept")} color='#f28c1f' />
+                <ButtonAction onClick={onClose} title={t("cancel")} color='#313131' />
+                <ButtonAction onClick={handleAccept} title={t("accept")} color='#1F046B' />
             </div>
         </Modal>
     );

@@ -50,8 +50,8 @@ const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose }) => {
                 ))}
             </div>
             <div className={styles.containerButtons}>
-                <ButtonAction onClick={onClose} title={t("cancel")} color='blue' />
-                <ButtonAction onClick={onClose} title={t("accept")} color='#ee911d' />
+                <ButtonAction onClick={onClose} title={t("cancel")} color='#313131' />
+                <ButtonAction onClick={onClose} title={t("accept")} color='#1F046B' />
             </div>
         </Modal>
     );

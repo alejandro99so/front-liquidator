@@ -16,5 +16,9 @@
   "select_bank": "Select Bank",
   "select_type_account": "Select Type Account",
   "pay": "Pay",
-  "code": "Code"
+  "code": "Code",
+  "takePhoto": "Take Photo",
+  "selectAnother": "Select Another",
+  "redoPhoto": "Redo Photo",
+  "savePhoto": "Save Photo"
 }

@@ -3,20 +3,21 @@
 import Image from 'next/image';
 import styles from './footer.module.css';
 import Link from 'next/link';
-import LanguageSwitcher from '../Language/LanguageSwitcher';
-import Logo from '../Logo';
 import { useTranslation } from 'react-i18next';
+import { usePathname } from 'next/navigation';
+import Logo from '../Logo';
 
 export const Footer = () => {
     const { t } = useTranslation(["header"])
+    const path = usePathname();
     return (
         <footer className={styles.container}>
             <Link href={"/"} className={styles.logo}>
-                <Image src={"/logo-light.svg"} alt='logo' width={190} height={80} />
+                <Logo />
             </Link>
             <div></div>
             <div className={styles.containerSocial}>
-                <div className={styles.contaimerMenu}>
+                {path === "/" && <div className={styles.contaimerMenu}>
 
                     <ul className={styles.menu}>
                         <li>
@@ -35,7 +36,7 @@ export const Footer = () => {
                             </Link>
                         </li>
                     </ul>
-                </div>
+                </div>}
                 <div className={styles.button}>
                     <Link href={"/"} className={styles.logo}>
                         <Image src={"/social/x.png"} alt="logo" width={25} height={25} />

@@ -1,5 +1,4 @@
 .content {
-  font-family: "Roboto Flex", "Helvetica Neue", Helvetica, Arial;
   display: flex;
   flex-direction: row;
   padding: 20% 0;
@@ -9,14 +8,14 @@
   background-color: transparent;
   width: 50px;
   border: none;
-  border-bottom: 2px #fff solid;
+  border-bottom: 2px #00000085 solid;
   padding: 5px;
   margin: 0 20px;
   outline: none;
   font-size: 40px;
   text-align: center;
   text-transform: uppercase;
-  color: #fff;
+  color: #000;
 }
 
 .containerButtons {

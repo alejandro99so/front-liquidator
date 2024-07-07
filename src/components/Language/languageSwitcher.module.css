@@ -4,21 +4,21 @@
 }
 
 .select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  text-align: center;
   display: inline-block;
   width: 100%;
   cursor: pointer;
   padding: 7px 10px;
   height: 42px;
   outline: 0;
-  background-color: transparent;
+  background-color: var(--softBg);
   font-size: 1em;
   color: var(--softTextColor);
   border-radius: 12px;
   position: relative;
   transition: all 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .select::-ms-expand {
