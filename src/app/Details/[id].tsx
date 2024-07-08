@@ -7,8 +7,9 @@ import { ButtonLink } from '@/components/Buttons/ButtonLink';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-interface FormState {
+type FormState = {
     red: string;
     token: string;
     total: string;
@@ -17,22 +18,35 @@ interface FormState {
     method: string;
 }
 
-interface BankDetails {
+type BankDetails = {
     bank: string;
     typeAccount: string;
     nAccount: string;
 }
 
+type Room = {
+    red: string;
+    token: string;
+    total: string;
+    totalToken: string;
+    note: string;
+    method: string;
+    qr: string;
+    bankDetails: BankDetails;
+}
 const DetailsPage = () => {
     const { t } = useTranslation(['pay'])
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
+    const router = useRouter();
 
     const [form, setForm] = useState<FormState>({
-        red: 'Base',
-        token: 'USDC',
-        total: '160000',
-        totalToken: '4000',
+        red: '',
+        token: '',
+        total: '',
+        totalToken: '',
         note: '',
-        method: 'QR',
+        method: 'qr',
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,12 +56,10 @@ const DetailsPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
     const [bankDetails, setBankDetails] = useState<BankDetails>({
-        bank: 'Bancolombia',
-        typeAccount: 'Ahorros',
-        nAccount: '1234567890'
+        bank: '',
+        typeAccount: '',
+        nAccount: ''
     });
-
-    const qrData = "h/Z4+HZGpqPc33a9iwQxfnWPpbw3KFvQv1F7fXzU1Oe5L1yjs7z47BtdR+npU4njSO9qSk5c2DoLlr4S2kPOlIQD3xY5wDXrWPNmOf5Rh/vE3Nur5p/rmoIaxjyocbzaAOX6QxKiQ2pMDI9GwDgUEupS2QVzyj/Q4iVLjoBk4y+ZnBp14MitCtcL4Jt6JvQ2GaNfqe7po09whACNBP4f/7Su7/ul5T2V408UAHtSedXBq5FgT3N/e7V6PAd9keFafi25QpOjyzuLhp2LN6CB8KX19OLfs+SkfNbE66I5YukwM3ycqUJRHUEPl9hwB7U0zvVAkOHtyfIuwdE/9L8Hbw=="
 
     const generateQRCode = useCallback((text: string) => {
         QRCode.toDataURL(text, (err, url) => {
@@ -60,31 +72,56 @@ const DetailsPage = () => {
     }, []);
 
     useEffect(() => {
-        if (form.method === 'QR') {
-            generateQRCode(qrData);
+        if (id) {
+            const fetchRoomDetails = async () => {
+                try {
+                    const response = await fetch(`http://localhost:3000/room/${id}`);
+                    const data: Room | null = await response.json();
+
+                    if (data) {
+                        setForm({
+                            red: data.red,
+                            token: data.token,
+                            total: data.total,
+                            totalToken: data.totalToken,
+                            note: data.note,
+                            method: data.method,
+                        });
+                        if (form.method === 'qr') {
+                            generateQRCode(data.qr);
+                        } else {
+                            setBankDetails(data.bankDetails);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch room details:', error);
+                }
+            };
+
+            fetchRoomDetails();
         }
-    }, [form.method, generateQRCode]);
+    }, [form.method, generateQRCode, id]);
 
-    const handleRadioChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setForm(prevForm => ({
-            ...prevForm,
-            method: value,
-        }));
+    // const handleRadioChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { value } = e.target;
+    //     setForm(prevForm => ({
+    //         ...prevForm,
+    //         method: value,
+    //     }));
 
-        if (value === 'QR') {
-            generateQRCode(qrData);
-        } else if (value === 'Account') {
-            setBankDetails({
-                bank: 'Sample Bank',
-                typeAccount: 'Saving',
-                nAccount: '1234567890'
-            });
-            setQrCode(null);
-        }
+    //     if (value === 'QR') {
+    //         generateQRCode(qrData);
+    //     } else if (value === 'Account') {
+    //         setBankDetails({
+    //             bank: '',
+    //             typeAccount: '',
+    //             nAccount: ''
+    //         });
+    //         setQrCode(null);
+    //     }
 
-        setIsModalOpen(true);
-    }, [generateQRCode]);
+    //     setIsModalOpen(true);
+    // }, [generateQRCode]);
 
     console.log({ qrCode });
 
@@ -104,11 +141,7 @@ const DetailsPage = () => {
             <div className={styles.formContainer}>
                 {confirmationCode && (
                     <div className={styles.confirmationCode}>
-                        <div>
-                            <label className={styles.code}> {t("code")}: {confirmationCode}</label>
-                        </div>
                         <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
-                            <span>Message:</span>
                             <Link href={"/Room"}>
                                 <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
                             </Link>
@@ -117,14 +150,7 @@ const DetailsPage = () => {
                 )}
                 <div className={styles.inputGroup}>
                     <label>Red:</label>
-                    <select className={styles.select} name="red" value={form.red} disabled={!isEditing}>
-                        <option value="Base">Base</option>
-                        <option value="Avalanche">Avalanche</option>
-                        <option value="Ethereum">Ethereum</option>
-                        <option value="Arbitrum">Arbitrum</option>
-                        <option value="Polygon">Polygon</option>
-                        <option value="Optimism">Optimism</option>
-                    </select>
+                    <div className={styles.value}>{form.red}</div>
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Token:</label>
@@ -169,33 +195,6 @@ const DetailsPage = () => {
                             <span className={styles.rateValue}>{rate.toFixed(2)} COP</span>
                         </div>
                     )}
-                </div>
-                <div className={styles.inputGroup}>
-                    <label>{t("method")}:</label>
-                    <div className={styles.radioGroup}>
-                        <label>
-                            <input
-                                type="radio"
-                                className={styles.radio}
-                                name="method"
-                                value="QR"
-                                checked={form.method === 'QR'}
-                                onChange={handleRadioChange}
-                                disabled={!isEditing}
-                            /> {t("qr_code")}
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                className={styles.radio}
-                                name="method"
-                                value="Account"
-                                checked={form.method === 'Account'}
-                                onChange={handleRadioChange}
-                                disabled={!isEditing}
-                            /> {t("account")}
-                        </label>
-                    </div>
                 </div>
                 {form.method === 'QR' && qrCode && (
                     <div className={styles.details}>

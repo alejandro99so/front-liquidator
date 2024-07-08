@@ -53,7 +53,7 @@ export const useFormState = () => {
       total !== "" &&
       totalToken !== "" &&
       method !== "" &&
-      ((method === "QR" && qrCode !== null) ||
+      ((method === "qr" && qrCode !== null) ||
         (method === "Account" &&
           bankDetails.bank !== "" &&
           bankDetails.typeAccount !== "" &&
@@ -107,7 +107,7 @@ export const useFormState = () => {
         method: value,
       }));
 
-      if (value === "QR") {
+      if (value === "qr") {
         setQrCode(null); // Reset QR code
       } else if (value === "Account") {
         setBankDetails({ bank: "", typeAccount: "", nAccount: "" }); // Reset bank details
@@ -120,7 +120,7 @@ export const useFormState = () => {
 
   const handleModalClose = (data?: BankDetails) => {
     setIsModalOpen(false);
-    if (form.method === "QR") {
+    if (form.method === "qr") {
       setQrCode(data?.bank || null);
     } else if (form.method === "Account" && data) {
       setBankDetails(data);

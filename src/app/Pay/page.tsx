@@ -43,7 +43,8 @@ const PayPage = () => {
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [qrCodeData, setQrCodeData] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(true);
-    const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
+    const [joinCode, setJoinCode] = useState<string | null>(null);
+    const [idTrxReq, setIdTrxReq] = useState<string | null>(null);
     const [bankDetails, setBankDetails] = useState<BankDetails>({
         bank: '',
         typeAccount: '',
@@ -132,33 +133,21 @@ const PayPage = () => {
     const paymentDetails = {
         network: form.red,
         contract: form.token,
-        cop: form.total,
-        usd: form.totalToken,
+        cop: parseInt(form.total),
+        usd: parseInt(form.totalToken),
         type: form.method,
         message: form.note,
         ...(form.method === 'qr' ? { qr: qrCodeData } : bankDetails)
     };
 
     const handleContinue = async () => {
-        const paymentDetails = {
-            network: form.red,
-            contract: form.token,
-            cop: parseInt(form.total),
-            usd: parseInt(form.totalToken),
-            type: form.method,
-            message: form.note,
-            ...(form.method === 'qr' ? { qr: qrCodeData } : bankDetails)
-        };
-
-        console.log("Payment Details:", paymentDetails);
-
         const jwt = sessionStorage.getItem('jwt');
-        console.log({ jwt });
 
         if (!jwt) {
             console.error('Token is missing');
             return;
         }
+        console.log({ paymentDetails });
 
         try {
             const response = await fetch('http://localhost:3000/room/request', {
@@ -169,6 +158,46 @@ const PayPage = () => {
                 },
                 body: JSON.stringify(paymentDetails)
             });
+
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response:', errorText);
+                throw new Error('Network response was not ok');
+            }
+
+            const { code, id } = await response.json();
+            setJoinCode(code)
+            setIdTrxReq(id)
+        } catch (error) {
+            console.error('Payment failed:', error);
+        }
+        setIsEditing(false);
+    };
+
+    const handleCancel = () => {
+        setJoinCode(null);
+        setIsEditing(true);
+    };
+
+    const handlePay = async () => {
+        const jwt = sessionStorage.getItem('jwt');
+
+        if (!jwt) {
+            console.error('Token is missing');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/room/request-confirm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify({ id: idTrxReq })
+            });
+
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -181,48 +210,23 @@ const PayPage = () => {
         } catch (error) {
             console.error('Payment failed:', error);
         }
-
-        // const generateConfirmationCode = () => {
-        //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        //     let code = '';
-        //     for (let i = 0; i < 4; i++) {
-        //         const randomIndex = Math.floor(Math.random() * characters.length);
-        //         code += characters[randomIndex];
-        //     }
-        //     return code;
-        // };
-
-        // setConfirmationCode(generateConfirmationCode());
-        // setIsEditing(false);
-    };
-
-
-
-    const handleCancel = () => {
-        setConfirmationCode(null);
-        setIsEditing(true);
-    };
-
-    const handlePay = async () => {
-
-        console.log("Payment Details:", paymentDetails);
-
+        setIsEditing(false);
     };
 
     return (
         <PageContainer>
             <div className={styles.formContainer}>
-                {confirmationCode && (
+                {joinCode && (
                     <div className={styles.confirmationCode}>
                         <div>
-                            <label className={styles.code}> {t("code")}: {confirmationCode}</label>
+                            <label className={styles.code}> {t("code")}: {joinCode}</label>
                         </div>
-                        <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
+                        {/* <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
                             <span>Message:</span>
                             <Link href={"/Room"}>
                                 <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
                 )}
                 <div className={styles.inputGroup}>
