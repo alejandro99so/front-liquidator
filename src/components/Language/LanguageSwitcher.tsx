@@ -12,7 +12,7 @@ const LanguageSwitcher = () => {
 
     return (
         <div className={styles.container}>
-            <select onChange={handleLanguageChange} className={styles.select} >
+            <select onChange={handleLanguageChange} className={styles.select} value={i18n.language}>
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
             </select>

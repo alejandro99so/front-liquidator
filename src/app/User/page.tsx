@@ -42,7 +42,7 @@ const UserPage = () => {
             const dataRandom = i18n.language === 'es' ? esDataRandom : enDataRandom;
             setCurrentPhrase(dataRandom[currentIndex]);
         }
-    }, [i18n.language]);
+    }, [i18n.language, currentIndex]);
 
 
     return (

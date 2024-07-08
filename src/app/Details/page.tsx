@@ -1,13 +1,12 @@
 "use client"
 import PageContainer from '@/components/PageContainer/PageContainer';
 import styles from './details.module.css';
-import { useState, useEffect, useCallback } from 'react';
-import SelectModal from '@/components/Modal/selectModal/SelectModal';
-import InfoBankModal from '@/components/Modal/infoBankModal/InfoBankModal';
+import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { ButtonLink } from '@/components/Buttons/ButtonLink';
-import { ButtonAction } from '@/components/Buttons/ButtonAction';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import QRCode from 'qrcode';
 
 interface FormState {
     red: string;
@@ -25,73 +24,46 @@ interface BankDetails {
 }
 
 const DetailsPage = () => {
+    const { t } = useTranslation(['pay'])
+
     const [form, setForm] = useState<FormState>({
         red: 'Base',
         token: 'USDC',
-        total: '160,000.00',
-        totalToken: '4,000.00',
+        total: '160000',
+        totalToken: '4000',
         note: '',
-        method: '',
+        method: 'QR',
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [rate, setRate] = useState<number | null>(null);
-
-    const [bankDetails, setBankDetails] = useState<BankDetails>({
-        bank: '',
-        typeAccount: '',
-        nAccount: ''
-    });
-
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [confirmationCode, setConfirmationCode] = useState<string | null>(null);
+    const [bankDetails, setBankDetails] = useState<BankDetails>({
+        bank: 'Bancolombia',
+        typeAccount: 'Ahorros',
+        nAccount: '1234567890'
+    });
+
+    const qrData = "h/Z4+HZGpqPc33a9iwQxfnWPpbw3KFvQv1F7fXzU1Oe5L1yjs7z47BtdR+npU4njSO9qSk5c2DoLlr4S2kPOlIQD3xY5wDXrWPNmOf5Rh/vE3Nur5p/rmoIaxjyocbzaAOX6QxKiQ2pMDI9GwDgUEupS2QVzyj/Q4iVLjoBk4y+ZnBp14MitCtcL4Jt6JvQ2GaNfqe7po09whACNBP4f/7Su7/ul5T2V408UAHtSedXBq5FgT3N/e7V6PAd9keFafi25QpOjyzuLhp2LN6CB8KX19OLfs+SkfNbE66I5YukwM3ycqUJRHUEPl9hwB7U0zvVAkOHtyfIuwdE/9L8Hbw=="
+
+    const generateQRCode = useCallback((text: string) => {
+        QRCode.toDataURL(text, (err, url) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            setQrCode(url);
+        });
+    }, []);
 
     useEffect(() => {
-        const { total, totalToken, method } = form;
-        const isValid = total !== '' && totalToken !== '' && method !== '' &&
-            ((method === 'QR' && qrCode !== null) ||
-                (method === 'Account' && bankDetails.bank !== '' && bankDetails.typeAccount !== '' && bankDetails.nAccount !== ''));
-        setIsFormValid(isValid);
-    }, [form, bankDetails, qrCode]);
-
-    useEffect(() => {
-        const { total, totalToken } = form;
-        const totalValue = parseFloat(total.replace(/,/g, ''));
-        const totalTokenValue = parseFloat(totalToken);
-
-        if (!isNaN(totalValue) && !isNaN(totalTokenValue) && totalTokenValue !== 0) {
-            setRate(totalValue / totalTokenValue);
-        } else {
-            setRate(null);
+        if (form.method === 'QR') {
+            generateQRCode(qrData);
         }
-    }, [form.total, form.totalToken]);
-
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setForm(prevForm => ({
-            ...prevForm,
-            [name]: value,
-        }));
-    }, []);
-
-    const handleBankDetailsChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setBankDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value,
-        }));
-    }, []);
-
-    const handleTokenChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setForm(prevForm => ({
-            ...prevForm,
-            [name]: value,
-            totalToken: '',
-        }));
-    }, []);
+    }, [form.method, generateQRCode]);
 
     const handleRadioChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
@@ -101,67 +73,51 @@ const DetailsPage = () => {
         }));
 
         if (value === 'QR') {
-            setQrCode(null);  // Reset QR code
+            generateQRCode(qrData);
         } else if (value === 'Account') {
-            setBankDetails({ bank: '', typeAccount: '', nAccount: '' });  // Reset bank details
+            setBankDetails({
+                bank: 'Sample Bank',
+                typeAccount: 'Saving',
+                nAccount: '1234567890'
+            });
+            setQrCode(null);
         }
 
         setIsModalOpen(true);
-    }, []);
+    }, [generateQRCode]);
 
-    const handleModalClose = (data?: BankDetails) => {
-        setIsModalOpen(false);
-        if (form.method === 'QR') {
-            setQrCode(data?.bank || null);
-        } else if (form.method === 'Account' && data) {
-            setBankDetails(data);
-        }
+    console.log({ qrCode });
+
+    const handleTotalTokenClick = () => {
+        setIsModalOpen(true);
     };
 
-    const handleImageSelect = (image: string) => {
-        setQrCode(image);
-        setIsModalOpen(false);
-    };
-
-    const handleContinue = () => {
-        const generateConfirmationCode = () => {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < 4; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                code += characters[randomIndex];
-            }
-            return code;
+    const handlePay = async () => {
+        const paymentDetails = {
+            totalToken: form.totalToken,
         };
-
-        setConfirmationCode(generateConfirmationCode());
-        setIsEditing(false);
-    };
-
-    const handleCancel = () => {
-        setConfirmationCode(null);
-        setIsEditing(true);
+        console.log("Payment Details:", paymentDetails);
     };
 
     return (
         <PageContainer>
             <div className={styles.formContainer}>
-                <div className={styles.infoUser}>
-                    <div className={styles.info}>
-                        <Image src={"/user.svg"} alt='' width={20} height={20} />
-                        <span className={styles.address}>0x42...Fb8a</span>
-                        <Link href={"/Room"}>
-                            <Image src={"/message.svg"} alt='' width={20} height={20} />
-                        </Link>
+                {confirmationCode && (
+                    <div className={styles.confirmationCode}>
+                        <div>
+                            <label className={styles.code}> {t("code")}: {confirmationCode}</label>
+                        </div>
+                        <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
+                            <span>Message:</span>
+                            <Link href={"/Room"}>
+                                <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
+                            </Link>
+                        </div>
                     </div>
-                    <div className={styles.data}>
-                        <span className={styles.rate}>12 ordes</span> |
-                        <span className={styles.rate}>100% finalization</span>
-                    </div>
-                </div>
+                )}
                 <div className={styles.inputGroup}>
                     <label>Red:</label>
-                    <select className={styles.select} name="red" value={form.red} onChange={handleInputChange} disabled={!isEditing}>
+                    <select className={styles.select} name="red" value={form.red} disabled={!isEditing}>
                         <option value="Base">Base</option>
                         <option value="Avalanche">Avalanche</option>
                         <option value="Ethereum">Ethereum</option>
@@ -172,119 +128,140 @@ const DetailsPage = () => {
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Token:</label>
-                    <select className={styles.select} name="token" value={form.token} onChange={handleTokenChange} disabled={!isEditing}>
-                        <option value="DAI">DAI</option>
+                    <select className={styles.select} name="token" value={form.token} disabled={!isEditing}>
                         <option value="USDC">USDC</option>
+                        <option value="DAI">DAI</option>
                         <option value="USDT">USDT</option>
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Total:</label>
-                    <div className={styles.totalInputContainer}>
+                    <div className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}>
                         <input
-                            type="text"
+                            type="number"
                             name="total"
-                            value={"160,000.00"}
-                            onChange={handleInputChange}
+                            value={form.total}
                             className={styles.totalInput}
                             required
                             disabled={!isEditing}
                         />
-                        <span className={styles.unit}>COP</span>
+                        <span className={`${styles.unit} ${!isEditing ? styles.disabled : ''}`}>COP</span>
                     </div>
                 </div>
                 <div>
                     <div className={styles.inputGroup}>
                         <label>Total Token:</label>
-                        <div className={styles.totalInputContainer}>
+                        <div className={`${styles.totalInputContainer}`}>
                             <input
-                                type="text"
+                                type="number"
                                 name="totalToken"
-                                value={"4,000.00"}
-                                onChange={handleInputChange}
+                                value={form.totalToken}
                                 className={styles.totalInput}
                                 required
+                                onClick={handleTotalTokenClick}
                             />
-                            <span className={styles.unit}>{form.token}</span>
+                            <span className={`${styles.unit}`}>{form.token}</span>
                         </div>
                     </div>
                     {rate !== null && (
-                        <span className={styles.rateInfo}>
-                            Rate: {"40.00"} COP
-                        </span>
+                        <div className={styles.rateInfoContainer}>
+                            <span className={styles.rateLabel}>Rate:</span>
+                            <span className={styles.rateValue}>{rate.toFixed(2)} COP</span>
+                        </div>
                     )}
                 </div>
-
-                {form.method === 'QR' && (
+                <div className={styles.inputGroup}>
+                    <label>{t("method")}:</label>
+                    <div className={styles.radioGroup}>
+                        <label>
+                            <input
+                                type="radio"
+                                className={styles.radio}
+                                name="method"
+                                value="QR"
+                                checked={form.method === 'QR'}
+                                onChange={handleRadioChange}
+                                disabled={!isEditing}
+                            /> {t("qr_code")}
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                className={styles.radio}
+                                name="method"
+                                value="Account"
+                                checked={form.method === 'Account'}
+                                onChange={handleRadioChange}
+                                disabled={!isEditing}
+                            /> {t("account")}
+                        </label>
+                    </div>
+                </div>
+                {form.method === 'QR' && qrCode && (
                     <div className={styles.details}>
                         <div className={styles.inputGroup}>
-                            <label>QR Code:</label>
+                            <label>{t("qr_code")}:</label>
                             {qrCode ? (
                                 <Image src={qrCode} alt="QR Code" width={200} height={200} className={styles.qrImage} />
                             ) : (
-                                <span>No QR code selected</span>
+                                <span>{t("qr_select")}</span>
                             )}
                         </div>
                     </div>
                 )}
-                <div className={styles.details}>
-                    <div className={styles.inputGroup}>
-                        <label>Bank:</label>
-                        <input
-                            type="text"
-                            name="bank"
-                            value={"Bancolombia"}
-                            onChange={handleBankDetailsChange}
-                            className={styles.totalInput}
-                            required
-                            disabled={!isEditing}
-                        />
+                {form.method === 'Account' && (
+                    <div className={styles.details}>
+                        <div className={styles.inputGroup}>
+                            <label>{t("bank")}:</label>
+                            <input
+                                type="text"
+                                name="bank"
+                                value={bankDetails.bank}
+                                className={styles.totalInput}
+                                required
+                                disabled={!isEditing}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            <label>{t("type")}:</label>
+                            <input
+                                type="text"
+                                name="typeAccount"
+                                value={bankDetails.typeAccount}
+                                className={styles.totalInput}
+                                required
+                                disabled={!isEditing}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            <label>{t("account")}:</label>
+                            <input
+                                type="text"
+                                name="nAccount"
+                                value={bankDetails.nAccount}
+                                className={styles.totalInput}
+                                required
+                                disabled={!isEditing}
+                            />
+                        </div>
                     </div>
-                    <div className={styles.inputGroup}>
-                        <label>Type Account:</label>
-                        <input
-                            type="text"
-                            name="typeAccount"
-                            value={"Ahorros"}
-                            onChange={handleBankDetailsChange}
-                            className={styles.totalInput}
-                            required
-                            disabled={!isEditing}
-                        />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label>N° Account:</label>
-                        <input
-                            type="text"
-                            name="nAccount"
-                            value={"1234567890"}
-                            onChange={handleBankDetailsChange}
-                            className={styles.totalInput}
-                            required
-                            disabled={!isEditing}
-                        />
-                    </div>
-                </div>
+                )}
                 <div className={styles.inputGroup}>
-                    <label>Note:</label>
+                    <label>{t("note")}:</label>
                     <textarea
                         rows={5}
                         name="note"
-                        value={"Pago servicio publicos."}
-                        onChange={handleInputChange}
+                        value={form.note}
                         className={styles.textarea}
                         disabled={!isEditing}>
                     </textarea>
                 </div>
-                {isEditing ? (
-                    <button className={styles.payButton} disabled={!isFormValid} aria-disabled={!isFormValid} onClick={handleContinue}>Continue</button>
-                ) : (
-                    <>
-                        <div className={styles.containerButtons}>
-                            <ButtonLink href="/" title="Pay" />
-                        </div>
-                    </>
-                )}
+                <div className={styles.containerButtons}>
+                    <ButtonLink href="/Building" title={t("pay")} color='#1F046B' onClick={handlePay} />
+                </div>
+                {/* {isModalOpen && (
+                    <SelectModal onClose={() => setIsModalOpen(false)} />
+                )} */}
             </div>
         </PageContainer>
     );

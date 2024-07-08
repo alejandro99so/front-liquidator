@@ -14,28 +14,49 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .inputGroup label {
-  flex: 0 0 30%;
-  margin-bottom: 0;
   font-weight: 500;
   white-space: nowrap;
-  text-align: start;
 }
 
-.inputGroup select,
 .inputGroup input,
-.inputGroup textarea,
 .totalInput {
   font-size: 20px;
-  width: 70%;
   padding: 10px;
   background-color: #fff;
   border: 2px solid #aaaaaa;
   color: #000;
   border-radius: 10px;
   outline: none;
+  width: 150px;
+  text-align: center;
+}
+
+.buttonsGroup {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.changeButton {
+  font-size: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border: 2px solid #aaaaaa;
+  color: #000;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 50px;
+  text-align: center;
+}
+
+.changeButton:hover {
+  background-color: #f0f0f0;
 }
 
 .containerButtons {

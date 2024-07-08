@@ -53,7 +53,7 @@ const PayPage = () => {
     useEffect(() => {
         const { total, totalToken, method } = form;
         const isValid = total !== '' && totalToken !== '' && method !== '' &&
-            ((method === 'QR' && qrCode !== null) ||
+            ((method === 'qr' && qrCode !== null) ||
                 (method === 'Account' && bankDetails.bank !== '' && bankDetails.typeAccount !== '' && bankDetails.nAccount !== ''));
         setIsFormValid(isValid);
     }, [form, bankDetails, qrCode]);
@@ -102,8 +102,8 @@ const PayPage = () => {
             method: value,
         }));
 
-        if (value === 'QR') {
-            setQrCode(null);  // Reset QR code
+        if (value === 'qr') {
+            setQrCode(null);  // Reset qr code
             setQrCodeData(null);
         } else if (value === 'Account') {
             setBankDetails({ bank: '', typeAccount: '', nAccount: '' });  // Reset bank details
@@ -129,20 +129,74 @@ const PayPage = () => {
         setQrCodeData(data);
     };
 
-    const handleContinue = () => {
-        const generateConfirmationCode = () => {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = '';
-            for (let i = 0; i < 4; i++) {
-                const randomIndex = Math.floor(Math.random() * characters.length);
-                code += characters[randomIndex];
-            }
-            return code;
+    const paymentDetails = {
+        network: form.red,
+        contract: form.token,
+        cop: form.total,
+        usd: form.totalToken,
+        type: form.method,
+        message: form.note,
+        ...(form.method === 'qr' ? { qr: qrCodeData } : bankDetails)
+    };
+
+    const handleContinue = async () => {
+        const paymentDetails = {
+            network: form.red,
+            contract: form.token,
+            cop: parseInt(form.total),
+            usd: parseInt(form.totalToken),
+            type: form.method,
+            message: form.note,
+            ...(form.method === 'qr' ? { qr: qrCodeData } : bankDetails)
         };
 
-        setConfirmationCode(generateConfirmationCode());
-        setIsEditing(false);
+        console.log("Payment Details:", paymentDetails);
+
+        const jwt = sessionStorage.getItem('jwt');
+        console.log({ jwt });
+
+        if (!jwt) {
+            console.error('Token is missing');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/room/request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify(paymentDetails)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server response:', errorText);
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            console.log('Payment successful:', result);
+        } catch (error) {
+            console.error('Payment failed:', error);
+        }
+
+        // const generateConfirmationCode = () => {
+        //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        //     let code = '';
+        //     for (let i = 0; i < 4; i++) {
+        //         const randomIndex = Math.floor(Math.random() * characters.length);
+        //         code += characters[randomIndex];
+        //     }
+        //     return code;
+        // };
+
+        // setConfirmationCode(generateConfirmationCode());
+        // setIsEditing(false);
     };
+
+
 
     const handleCancel = () => {
         setConfirmationCode(null);
@@ -150,35 +204,9 @@ const PayPage = () => {
     };
 
     const handlePay = async () => {
-        const paymentDetails = {
-            red: form.red,
-            token: form.token,
-            total: form.total,
-            totalToken: form.totalToken,
-            method: form.method,
-            note: form.note,
-            ...(form.method === 'QR' ? { qrCodeData } : bankDetails)
-        };
+
         console.log("Payment Details:", paymentDetails);
 
-        // try {
-        //     const response = await fetch('/api/payment', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(paymentDetails)
-        //     });
-
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-
-        //     const result = await response.json();
-        //     console.log('Payment successful:', result);
-        // } catch (error) {
-        //     console.error('Payment failed:', error);
-        // }
     };
 
     return (
@@ -262,8 +290,8 @@ const PayPage = () => {
                                 type="radio"
                                 className={styles.radio}
                                 name="method"
-                                value="QR"
-                                checked={form.method === 'QR'}
+                                value="qr"
+                                checked={form.method === 'qr'}
                                 onChange={handleRadioChange}
                                 disabled={!isEditing}
                             /> {t("qr_code")}
@@ -281,12 +309,12 @@ const PayPage = () => {
                         </label>
                     </div>
                 </div>
-                {form.method === 'QR' && (
+                {form.method === 'qr' && (
                     <div className={styles.details}>
                         <div className={styles.inputGroup}>
                             <label>{t("qr_code")}:</label>
                             {qrCode ? (
-                                <Image src={qrCode} alt="QR Code" width={200} height={200} className={styles.qrImage} />
+                                <Image src={qrCode} alt="qr Code" width={200} height={200} className={styles.qrImage} />
                                 // <span>{qrCodeData}</span>
                             ) : (
                                 <span>{t("qr_select")}</span>
@@ -355,7 +383,7 @@ const PayPage = () => {
                         </div>
                     </>
                 )}
-                {isModalOpen && form.method === 'QR' && (
+                {isModalOpen && form.method === 'qr' && (
                     <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} onQrCodeDetected={handleQrCodeDetected} />
                 )}
                 {isModalOpen && form.method === 'Account' && (
