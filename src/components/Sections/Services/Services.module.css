@@ -19,22 +19,7 @@
   overflow: hidden;
 }
 
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.3;
-  z-index: 0;
-}
 
-#circle3 {
-  width: 450px;
-  height: 450px;
-  border-radius: 450px;
-  filter: blur(20px);
-  bottom: 750px;
-  right: 722px;
-  background-color: var(--circle3Color);
-}
 
 .content {
   position: relative;
@@ -46,7 +31,7 @@
 
 .content h2 {
   font-family: "Readex Pro", sans-serif;
-  font-size: 48px;
+  font-size: 38px;
   font-weight: 600;
   width: 60%;
   text-align: center;
@@ -58,14 +43,25 @@
   display: inline-block;
   padding: 10px 20px;
   margin: 0 0 60px;
-  background-color: black;
-  color: white;
+  background-color: var(--viewServicesButton);
+  color: var(--softBg);
   border: none;
   cursor: pointer;
   width: 205px;
   height: 50px;
   border-radius: 20px;
   font-size: 22px;
+  transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+.viewServicesButton:hover {
+  background-color: var(--viewServicesButtonHover);
+  transform: scale(1.05);
+  transition: transform 0.9s ease, background-color 0.3s ease;
+}
+
+.viewServicesButton:active {
+  transform: scale(1.1);
 }
 
 .gradient {
@@ -94,7 +90,7 @@
   color: #fff;
   padding: 5px 10px;
   width: max-content;
-  font-size: 48px;
+  font-size: 38px;
   font-weight: 700;
 }
 
@@ -104,8 +100,9 @@
   left: 30%;
   width: 49%;
   text-align: end;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 300;
+  color: white;
 }
 
 @media (width < 1070px) {
@@ -121,5 +118,44 @@
     justify-content: center;
     align-items: center;
     width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content h2 {
+    font-size: 24px;
+    line-height: 30px;
+    width: 90%;
+  }
+  
+  .viewServicesButton {
+    width: auto;
+    max-width: 80%;
+    font-size: 18px;
+  }
+  
+  .servicesContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .servicesContainer img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .servicesContainerTitle {
+    font-size: 28px;
+    padding: 10px;
+    top: 10px;
+  }
+  
+  .servicesContainerSubtitle {
+    font-size: 16px;
+    padding: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    text-align: center;
   }
 }

@@ -12,19 +12,49 @@
   --textColor: #fafafa;
   --softBg: #000000;
   --softTextColor: #f1f1f1;
-  --circle1Color: #196520;
-  --circle2Color: #19777d;
-  --circle3Color: #ab2e2e;
+  --circle1Color: rgba(30, 0, 255, 0.589);
+  --circle2Color: rgb(2, 131, 92);
+  --circle3Color: rgb(0, 140, 255);
+  --viewServicesButtonHover: #ffffff;
+  --linkHover: #83838318;
+  --viewServicesButton: white;
+  --bubble1Variant1: #0000ff;
+  --bubble1Variant2: #ff00c8;
+  --bubble1Variant3: #00ff88;
+  --bubble2Variant1: #00ffff;
+  --bubble2Variant2: #00ff88;
+  --bubble2Variant3: #2f00ff;
+  --bubble3Variant1: #0011ff;
+  --bubble3Variant2: #ff0000;
+  --bubble3Variant3: #00ccff;
+  --bubble4Variant1: #0000ff;
+  --bubble4Variant2: #b700ff;
+  --bubble4Variant3: #1900ff;
 }
 
 .light {
   --bg: white;
   --textColor: #0d0d0d;
-  --softBg: #fff;
+  --softBg: #ffffff;
   --softTextColor: #161616;
-  --circle1Color: #b6f6bc;
-  --circle2Color: #6adee5;
-  --circle3Color: #f69a9a;
+  --circle1Color: rgba(30, 0, 255, 0.63);
+  --circle2Color: rgba(0, 255, 157, 0.733);
+  --circle3Color: rgba(0, 38, 255, 0.726);
+  --viewServicesButtonHover: #6780FF;
+  --linkHover: #6780ff31;
+  --viewServicesButton: black;
+  --bubble1Variant1: #0000ff00;
+  --bubble1Variant2: #ff00c800;
+  --bubble1Variant3: #00ff8800;
+  --bubble2Variant1: #00ffff00;
+  --bubble2Variant2: #00ff8800;
+  --bubble2Variant3: #2f00ff00;
+  --bubble3Variant1: #0011ff00;
+  --bubble3Variant2: #ff000000;
+  --bubble3Variant3: #00ccff00;
+  --bubble4Variant1: #0000ff00;
+  --bubble4Variant2: #b700ff00;
+  --bubble4Variant3: #1900ff00;
 }
 
 body {
@@ -72,3 +102,4 @@ main {
     padding-right: 20px; */
   }
 }
+

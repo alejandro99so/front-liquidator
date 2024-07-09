@@ -10,15 +10,15 @@ const HeroSection: React.FC = () => {
             <div className={styles.background}>
                 <div className={styles.circle} id={styles.circle1}></div>
                 <div className={styles.circle} id={styles.circle2}></div>
-                <div className={styles.circle} id={styles.circle3}></div>
+                <div className={styles.circle} id={styles.circle3}></div> 
             </div>
             <div className={styles.content}>
-                <h1>{t("heroSection.title")} <br /> {t("heroSection.start")}</h1>
-                <div className={styles.paragraphContainer}>
+                <h1 className="fade-in"> {t("heroSection.title")} <br /> {t("heroSection.start")}</h1>
+                <div className={`${styles.paragraphContainer} fade-in`}>
                     <span></span>
                     <p>{t("heroSection.paragraph")}</p>
                 </div>
-                <div className={styles.buttonInfoContainer}>
+                <div className={`${styles.buttonInfoContainer} fade-in`}>
                     <button className={styles.viewServicesButton}>{t("heroSection.viewServicesButton")}</button>
                     <div className={styles.infoBox}>
                         <div className={styles.popular}>
