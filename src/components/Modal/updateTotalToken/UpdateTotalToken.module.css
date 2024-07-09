@@ -1,6 +1,7 @@
 .content {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-evenly;
   padding: 20px;
   border-radius: 5px;
@@ -27,31 +28,28 @@
 .totalInput {
   font-size: 20px;
   padding: 10px;
-  background-color: #fff;
   border: 2px solid #aaaaaa;
   color: #000;
   border-radius: 10px;
   outline: none;
-  width: 150px;
+  width: 100px;
   text-align: center;
 }
 
 .buttonsGroup {
   display: flex;
+  align-items: center;
   gap: 10px;
   justify-content: center;
-  margin-top: 10px;
 }
 
 .changeButton {
-  font-size: 20px;
-  padding: 10px;
-  background-color: #fff;
-  border: 2px solid #aaaaaa;
+  font-size: 38px;
+  border: none;
+  background-color: transparent;
   color: #000;
-  border-radius: 10px;
   cursor: pointer;
-  width: 50px;
+  width: 40px;
   text-align: center;
 }
 

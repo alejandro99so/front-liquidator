@@ -21,6 +21,17 @@
   align-items: center;
 }
 
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.address {
+  font-size: 26px;
+  font-weight: 700;
+}
+
 .inputGroup label {
   flex: 0 0 30%;
   margin-bottom: 0;
@@ -36,21 +47,41 @@
   width: 70%;
   padding: 10px;
   background-color: #fff;
-  color: #000;
+  color: #fff;
   font-size: 16px;
   border-radius: 10px;
   outline: none;
 }
 
-.totalInputContainer {
+.inputGroup input {
+  color: #000;
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+.totalInputContainer,
+.textarea:disabled {
   display: flex;
   align-items: center;
-  background-color: white;
-  border: 1px solid #6d6d6d;
+  background-color: #b0b0b4;
   border-radius: 10px;
-  overflow: hidden;
   width: 100%;
   margin-bottom: 8px;
+}
+
+.totalInputToken {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.totalInputToken span {
+  color: #000;
 }
 
 .inputGroup select {
@@ -58,31 +89,20 @@
 }
 
 .totalInput {
+  text-align: left;
   border: none;
-  background: none;
+  background: #b0b0b4;
   padding: 10px;
   flex: 1;
   font-size: 20px;
-  color: #000;
+  color: #fff;
   border-radius: 5px;
 }
 
 .unit {
   padding: 10px;
   background: none;
-  color: #000;
-}
-
-.textarea {
-  background: none;
-  border: none;
   color: #fff;
-  border: 1px solid #6d6d6d;
-  font-family: "Readex Pro", sans-serif;
-  font-size: 20px;
-  width: calc(70% - 10px);
-  padding: 10px;
-  border-radius: 5px;
 }
 
 .radio {
@@ -100,7 +120,6 @@
 }
 
 .payButton {
-  background: #1f046b;
   border: none;
   padding: 10px 20px;
   color: #fff;
@@ -128,6 +147,7 @@
   right: 10px;
   top: 35px;
 }
+
 .rateInfoContainer {
   display: flex;
   align-items: center;
@@ -147,37 +167,9 @@
   text-align: left;
 }
 
-.confirmationCode {
-  margin-bottom: 20px;
-}
-
-.code {
-  font-size: 35px;
-  color: #ee911d;
-  text-transform: uppercase;
-  letter-spacing: 10px;
-}
-
 .containerButtons {
-  margin-top: 3rem;
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.totalInput:disabled,
-.select:disabled,
-.textarea:disabled,
-.radio:disabled {
-  background-color: #b0b0b4;
-  color: #fff;
-  cursor: not-allowed;
-}
-
-.unit.disabled {
-  color: #fff;
-}
-.totalInputContainer.disabled {
-  background-color: #b0b0b4;
+  justify-content: center;
 }

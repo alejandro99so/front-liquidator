@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 
-export interface FormState {
-  red: string;
-  token: string;
-  total: string;
-  totalToken: string;
-  note: string;
-  method: string;
-}
-
-export const useRateCalculation = (form: FormState): number | null => {
+const useExchangeRate = (form: FormState) => {
   const [rate, setRate] = useState<number | null>(null);
 
   useEffect(() => {
@@ -30,3 +21,5 @@ export const useRateCalculation = (form: FormState): number | null => {
 
   return rate;
 };
+
+export default useExchangeRate;

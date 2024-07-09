@@ -7,6 +7,7 @@ import enHome from "../public/locales/en/home.json";
 import enUser from "../public/locales/en/user.json";
 import enPay from "../public/locales/en/pay.json";
 import enBuilding from "../public/locales/en/building.json";
+import enDetails from "../public/locales/en/details.json";
 
 import esLading from "../public/locales/es/landing.json";
 import esHeader from "../public/locales/es/header.json";
@@ -14,6 +15,7 @@ import esHome from "../public/locales/es/home.json";
 import esUser from "../public/locales/es/user.json";
 import esPay from "../public/locales/es/pay.json";
 import esBuilding from "../public/locales/es/building.json";
+import esDetails from "../public/locales/es/details.json";
 
 const resources = {
   en: {
@@ -23,6 +25,7 @@ const resources = {
     user: enUser,
     pay: enPay,
     building: enBuilding,
+    details: enDetails,
   },
   es: {
     landing: esLading,
@@ -31,6 +34,7 @@ const resources = {
     user: esUser,
     pay: esPay,
     building: esBuilding,
+    details: esDetails,
   },
 };
 

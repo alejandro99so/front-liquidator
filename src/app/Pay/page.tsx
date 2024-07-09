@@ -9,67 +9,38 @@ import { ButtonLink } from '@/components/Buttons/ButtonLink';
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-
-interface FormState {
-    red: string;
-    token: string;
-    total: string;
-    totalToken: string;
-    note: string;
-    method: string;
-}
-
-interface BankDetails {
-    bank: string;
-    typeAccount: string;
-    nAccount: string;
-}
+import { networks, tokens } from '@/utils/networks';
+import useFormValidation from '@/hooks/useFormValidation';
+import useExchangeRate from '@/hooks/useExchangeRate';
+import fetchWithToken from '@/utils/fetchWithToken';
+import { FormState, BankDetails } from '../types';
 
 const PayPage = () => {
-    const { t } = useTranslation(['pay'])
+    const { t } = useTranslation(['pay']);
 
     const [form, setForm] = useState<FormState>({
         red: 'Base',
         token: 'USDC',
         total: '',
         totalToken: '',
-        note: '',
+        message: '',
         method: '',
     });
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [rate, setRate] = useState<number | null>(null);
     const [qrCode, setQrCode] = useState<string | null>(null);
     const [qrCodeData, setQrCodeData] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(true);
     const [joinCode, setJoinCode] = useState<string | null>(null);
     const [idTrxReq, setIdTrxReq] = useState<string | null>(null);
     const [bankDetails, setBankDetails] = useState<BankDetails>({
-        bank: '',
-        typeAccount: '',
-        nAccount: ''
+        bankName: '',
+        bankNumber: '',
+        bankType: ''
     });
 
-    useEffect(() => {
-        const { total, totalToken, method } = form;
-        const isValid = total !== '' && totalToken !== '' && method !== '' &&
-            ((method === 'qr' && qrCode !== null) ||
-                (method === 'Account' && bankDetails.bank !== '' && bankDetails.typeAccount !== '' && bankDetails.nAccount !== ''));
-        setIsFormValid(isValid);
-    }, [form, bankDetails, qrCode]);
-
-    useEffect(() => {
-        const { total, totalToken } = form;
-        const totalValue = parseFloat(total.replace(/,/g, ''));
-        const totalTokenValue = parseFloat(totalToken);
-
-        if (!isNaN(totalValue) && !isNaN(totalTokenValue) && totalTokenValue !== 0) {
-            setRate(totalValue / totalTokenValue);
-        } else {
-            setRate(null);
-        }
-    }, [form.total, form.totalToken]);
+    const isFormValid = useFormValidation(form, bankDetails, qrCode);
+    const rate = useExchangeRate(form);
 
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -87,15 +58,6 @@ const PayPage = () => {
         }));
     }, []);
 
-    const handleTokenChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setForm(prevForm => ({
-            ...prevForm,
-            [name]: value,
-            totalToken: '',
-        }));
-    }, []);
-
     const handleRadioChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setForm(prevForm => ({
@@ -106,17 +68,16 @@ const PayPage = () => {
         if (value === 'qr') {
             setQrCode(null);  // Reset qr code
             setQrCodeData(null);
-        } else if (value === 'Account') {
-            setBankDetails({ bank: '', typeAccount: '', nAccount: '' });  // Reset bank details
+        } else if (value === 'transfer') {
+            setBankDetails({ bankName: '', bankType: '', bankNumber: '' });  // Reset bank details
         }
 
         setIsModalOpen(true);
     }, []);
 
-
     const handleModalClose = (data?: BankDetails) => {
         setIsModalOpen(false);
-        if (form.method === 'Account' && data) {
+        if (form.method === 'transfer' && data) {
             setBankDetails(data);
         }
     };
@@ -136,43 +97,26 @@ const PayPage = () => {
         cop: parseInt(form.total),
         usd: parseInt(form.totalToken),
         type: form.method,
-        message: form.note,
-        ...(form.method === 'qr' ? { qr: qrCodeData } : bankDetails)
+        message: form.message,
+        ...(form.method === 'qr' ? { qr: qrCodeData } : { ...bankDetails })
     };
 
     const handleContinue = async () => {
-        const jwt = sessionStorage.getItem('jwt');
-
-        if (!jwt) {
-            console.error('Token is missing');
-            return;
-        }
-        console.log({ paymentDetails });
 
         try {
-            const response = await fetch('http://localhost:3000/room/request', {
+            const { code, id } = await fetchWithToken('http://localhost:3000/room/request', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(paymentDetails)
             });
+            console.log({ paymentDetails });
 
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server response:', errorText);
-                throw new Error('Network response was not ok');
-            }
-
-            const { code, id } = await response.json();
-            setJoinCode(code)
-            setIdTrxReq(id)
+            setJoinCode(code);
+            setIdTrxReq(id);
+            setIsEditing(false);
         } catch (error) {
             console.error('Payment failed:', error);
         }
-        setIsEditing(false);
     };
 
     const handleCancel = () => {
@@ -181,36 +125,17 @@ const PayPage = () => {
     };
 
     const handlePay = async () => {
-        const jwt = sessionStorage.getItem('jwt');
-
-        if (!jwt) {
-            console.error('Token is missing');
-            return;
-        }
-
         try {
-            const response = await fetch('http://localhost:3000/room/request-confirm', {
+            const result = await fetchWithToken('http://localhost:3000/room/request-confirm', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwt}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: idTrxReq })
             });
-
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server response:', errorText);
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await response.json();
             console.log('Payment successful:', result);
+            setIsEditing(false);
         } catch (error) {
             console.error('Payment failed:', error);
         }
-        setIsEditing(false);
     };
 
     return (
@@ -221,31 +146,22 @@ const PayPage = () => {
                         <div>
                             <label className={styles.code}> {t("code")}: {joinCode}</label>
                         </div>
-                        {/* <div style={{ marginTop: "10px", display: "flex", gap: "30px" }}>
-                            <span>Message:</span>
-                            <Link href={"/Room"}>
-                                <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
-                            </Link>
-                        </div> */}
                     </div>
                 )}
                 <div className={styles.inputGroup}>
                     <label>Red:</label>
                     <select className={styles.select} name="red" value={form.red} onChange={handleInputChange} disabled={!isEditing}>
-                        <option value="Base">Base</option>
-                        <option value="Avalanche">Avalanche</option>
-                        <option value="Ethereum">Ethereum</option>
-                        <option value="Arbitrum">Arbitrum</option>
-                        <option value="Polygon">Polygon</option>
-                        <option value="Optimism">Optimism</option>
+                        {networks.map((network) => (
+                            <option key={network} value={network}>{network}</option>
+                        ))}
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
                     <label>Token:</label>
-                    <select className={styles.select} name="token" value={form.token} onChange={handleTokenChange} disabled={!isEditing}>
-                        <option value="USDC">USDC</option>
-                        <option value="DAI">DAI</option>
-                        <option value="USDT">USDT</option>
+                    <select className={styles.select} name="token" value={form.token} onChange={handleInputChange} disabled={!isEditing}>
+                        {tokens.map((token) => (
+                            <option key={token} value={token}>{token}</option>
+                        ))}
                     </select>
                 </div>
                 <div className={styles.inputGroup}>
@@ -305,8 +221,8 @@ const PayPage = () => {
                                 type="radio"
                                 className={styles.radio}
                                 name="method"
-                                value="Account"
-                                checked={form.method === 'Account'}
+                                value="transfer"
+                                checked={form.method === 'transfer'}
                                 onChange={handleRadioChange}
                                 disabled={!isEditing}
                             /> {t("account")}
@@ -319,21 +235,20 @@ const PayPage = () => {
                             <label>{t("qr_code")}:</label>
                             {qrCode ? (
                                 <Image src={qrCode} alt="qr Code" width={200} height={200} className={styles.qrImage} />
-                                // <span>{qrCodeData}</span>
                             ) : (
                                 <span>{t("qr_select")}</span>
                             )}
                         </div>
                     </div>
                 )}
-                {form.method === 'Account' && (
+                {form.method === 'transfer' && (
                     <div className={styles.details}>
                         <div className={styles.inputGroup}>
                             <label>{t("bank")}:</label>
                             <input
                                 type="text"
-                                name="bank"
-                                value={bankDetails.bank}
+                                name="bankName"
+                                value={bankDetails.bankName}
                                 onChange={handleBankDetailsChange}
                                 className={styles.totalInput}
                                 required
@@ -344,8 +259,8 @@ const PayPage = () => {
                             <label>{t("type")}:</label>
                             <input
                                 type="text"
-                                name="typeAccount"
-                                value={bankDetails.typeAccount}
+                                name="bankType"
+                                value={bankDetails.bankType}
                                 onChange={handleBankDetailsChange}
                                 className={styles.totalInput}
                                 required
@@ -356,8 +271,8 @@ const PayPage = () => {
                             <label>{t("account")}:</label>
                             <input
                                 type="text"
-                                name="nAccount"
-                                value={bankDetails.nAccount}
+                                name="bankNumber"
+                                value={bankDetails.bankNumber}
                                 onChange={handleBankDetailsChange}
                                 className={styles.totalInput}
                                 required
@@ -370,8 +285,8 @@ const PayPage = () => {
                     <label>{t("note")}:</label>
                     <textarea
                         rows={5}
-                        name="note"
-                        value={form.note}
+                        name="message"
+                        value={form.message}
                         onChange={handleInputChange}
                         className={styles.textarea}
                         disabled={!isEditing}>
@@ -390,7 +305,7 @@ const PayPage = () => {
                 {isModalOpen && form.method === 'qr' && (
                     <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} onQrCodeDetected={handleQrCodeDetected} />
                 )}
-                {isModalOpen && form.method === 'Account' && (
+                {isModalOpen && form.method === 'transfer' && (
                     <InfoBankModal isOpen={isModalOpen} onClose={handleModalClose} />
                 )}
             </div>

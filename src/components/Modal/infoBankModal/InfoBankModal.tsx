@@ -3,18 +3,19 @@ import Modal from '../Modal';
 import styles from './InfoBankModal.module.css'
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
 import { useTranslation } from 'react-i18next';
+import { BankDetails } from '@/app/types';
 interface InfoBankModalProps {
     isOpen: boolean;
-    onClose: (data?: { bank: string; typeAccount: string; nAccount: string }) => void;
+    onClose: (data?: BankDetails) => void;
 }
 
 const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
     const { t } = useTranslation(['pay'])
 
-    const [form, setForm] = useState({
-        bank: '',
-        typeAccount: '',
-        nAccount: ''
+    const [form, setForm] = useState<BankDetails>({
+        bankName: '',
+        bankType: '',
+        bankNumber: ''
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -42,7 +43,7 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
             <div className={styles.content}>
                 <div className={styles.inputGroup}>
                     <label>{t("bank")}:</label>
-                    <select className={styles.select} name="bank" value={form.bank} onChange={handleInputChange}>
+                    <select className={styles.select} name="bankName" value={form.bankName} onChange={handleInputChange}>
                         <option value="">{t("select_bank")}</option>
                         <option value="Bancolombia">Bancolombia</option>
                         <option value="Banco BBVA">Banco BBVA</option>
@@ -51,7 +52,7 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
                 </div>
                 <div className={styles.inputGroup}>
                     <label>{t("type")}:</label>
-                    <select className={styles.select} name="typeAccount" value={form.typeAccount} onChange={handleTypeChange}>
+                    <select className={styles.select} name="bankType" value={form.bankNumber} onChange={handleTypeChange}>
                         <option value="">{t("select_type_account")}</option>
                         <option value="Ahorros">Ahorros</option>
                         <option value="Corriente">Corriente</option>
@@ -61,8 +62,8 @@ const InfoBankModal: React.FC<InfoBankModalProps> = ({ isOpen, onClose }) => {
                     <label>{t("account")}:</label>
                     <input
                         type="number"
-                        name="nAccount"
-                        value={form.nAccount}
+                        name="bankNumber"
+                        value={form.bankNumber}
                         onChange={handleInputChange}
                         className={styles.totalInput}
                         placeholder='1234567890'
