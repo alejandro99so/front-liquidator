@@ -8,6 +8,7 @@
   max-width: 1440px;
   margin: 0 auto;
   background-color: var(--softBg);
+  animation: fadeIn 1s ease-in-out forwards;
 }
 
 .circle {
@@ -15,41 +16,68 @@
   border-radius: 50%;
   opacity: 0.3;
   z-index: 0;
+  justify-content: center;
+  display: inline-flex;
+  flex-direction: row;
 }
 
+
 #circle1 {
-  width: 450px;
-  height: 450px;
-  border-radius: 450px;
-  filter: blur(25px);
-  top: 0px;
-  right: 230px;
+  width: 40rem;
+  height: 20rem;
+  border-radius: 9999px;
+  animation: one 10s infinite;
+  opacity: .9;
+  filter: blur(9rem);
   background-color: var(--circle1Color);
+  right: 140px;
+} 
+
+@keyframes one {
+  0%{right: 0rem; top: 0rem}
+  25%{right:  -10rem; top: 7rem;}
+  50%{right: 2rem; top: 15rem;}
+  75%{right: 5rem; top: 10rem}
+  100%{right: 0rem; top: 0rem}
 }
 
 #circle2 {
-  width: 450px;
-  height: 450px;
-  border-radius: 500px;
-  filter: blur(25px);
+  width: 40rem;
+  height: 20rem;
+  border-radius: 9999px;
+  opacity: .5;
+  filter: blur(8rem);
+  background-color: var(--circle2Color);
+  animation: two 10s infinite;
   top: 390px;
   right: 140px;
-  background-color: var(--circle2Color);
+}
+
+@keyframes two {
+  0%{left: 0rem; top: 0rem}
+  25%{left:  5rem; top: 1rem;}
+  50%{left: 10rem; top: 5rem;}
+  75%{left: 5rem; top: 10rem}
+  100%{left: 0rem; top: 0rem}
 }
 
 #circle3 {
-  width: 450px;
-  height: 450px;
-  border-radius: 450px;
-  filter: blur(20px);
-  top: 753px;
-  right: 720px;
+  width: 40rem;
+  height: 10rem;
+  border-radius: 9999px;
+  opacity: .5;
+  filter: blur(8rem);
   background-color: var(--circle3Color);
+  top: 500px;
+  right: 220px;
 }
 
 .content {
   position: relative;
   z-index: 1;
+  top: 180px;
+  right: 200px;
+
 }
 
 .content h1 {
@@ -103,6 +131,17 @@
   height: 50px;
   border-radius: 20px;
   font-size: 22px;
+  transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+.viewServicesButton:hover {
+  background-color: var(--viewServicesButtonHover);
+  transform: scale(1.05);
+  transition: transform 0.9s ease, background-color 0.3s ease;
+}
+
+.viewServicesButton:active {
+  transform: scale(1.1);
 }
 
 .infoBox {
@@ -110,7 +149,7 @@
   width: 555px;
   position: absolute;
   color: var(--softTextColor);
-  left: 465px;
+  left: 750px;
 }
 
 .popular {
@@ -134,3 +173,61 @@
     text-align: center;
   }
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); 
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out forwards; 
+}
+
+/*@media (max-width: 768px) {
+  .heroSection {
+    height: auto;
+    padding: 20px;
+  }
+  .content {
+    top: 120px;
+    right: 0;
+    text-align: center;
+  }
+  .content h1 {
+    font-size: 36px;
+  }
+  .paragraphContainer {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+  }
+  .paragraphContainer p {
+    width: 90%;
+    text-align: center;
+    font-size: 14px;
+  }
+  .buttonInfoContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  .viewServicesButton {
+    width: 100%;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .infoBox {
+    position: static;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .cryptoInfo {
+    justify-content: space-evenly;
+  }
+} */

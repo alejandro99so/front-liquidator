@@ -15,7 +15,7 @@ const ServicesSection: React.FC = () => {
             </div>
             <div className={styles.servicesContainer}>
                 <span className={styles.servicesContainerTitle}>{t("servicesSection.price")}</span>
-                <Image src={"/background/Services.png"} alt='' width={1007} height={670} />
+                <Image src={"/background/Services.png"} alt='' width={860} height={570} />
                 <span className={styles.servicesContainerSubtitle}>{t("servicesSection.find")}</span>
             </div>
         </section>

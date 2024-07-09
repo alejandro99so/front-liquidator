@@ -7,13 +7,13 @@
 }
 
 .aboutUsSection h2 {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 500;
   margin-bottom: 20px;
 }
 
 .aboutUsSection p {
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 300;
   margin-bottom: 40px;
   max-width: 1160px;
@@ -47,17 +47,94 @@
   transform: translateX(-50%);
   color: #fff;
   padding: 5px 10px;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 700;
 }
 
-.backgroundStripe {
+
+.bubble {
+  --float-distance: -20px;
+  --float-speed: 3000ms;
+  --size: 200px;
+  width: var(--size);
+  height: var(--size);
+  aspect-ratio: 1/1;
+  border-radius: 50%;
   position: absolute;
-  top: 610px;
-  left: 0px;
-  width: 100%;
-  height: 20%;
-  background-color: #00a99d;
-  transform: skewY(-14deg);
-  z-index: 0;
+  bottom: 30vh;
+  backdrop-filter: blur(5px);
+  box-shadow: inset 0 0.13vmin var(--bubble1Variant1),
+  inset 0 0.18vmin var(--bubble1Variant2),
+  inset 0.1vmin 0.1vmin var(--bubble1Variant3);
+  animation: floating var(--float-speed)
+  ease-in-out infinite;
+  left: 85%;
+  top: 30%;
+}
+
+.bubble2 {
+  box-shadow: inset 0 0.13vmin var(--bubble2Variant1),
+  inset 0 0.18vmin var(--bubble2Variant2),
+  inset 0.1vmin 0.1vmin var(--bubble2Variant3);
+  left: 5%;
+  top: 30%;
+  --size: 100px;
+  width: var(--size);
+  height: var(--size);
+}
+
+.bubble3 {
+  box-shadow: inset 0 0.13vmin var(--bubble3Variant1),
+  inset 0 0.18vmin var(--bubble3Variant2),
+  inset 0.1vmin 0.1vmin var(--bubble3Variant3);
+  left: 10%;
+  top: 60%;
+  --size: 200px;
+  width: var(--size);
+  height: var(--size);
+}
+
+.bubble4 {
+  box-shadow: inset 0 0.13vmin var(--bubble4Variant1),
+  inset 0 0.18vmin var(--bubble4Variant2),
+  inset 0.1vmin 0.1vmin var(--bubble4Variant3);
+  left: 80%;
+  top: 70%;
+  --size: 100px;
+  width: var(--size);
+  height: var(--size);
+}
+
+.bubble::before,
+.bubble::after {
+  content: '';
+  position: absolute;
+  border-radius: inherit;
+}
+
+.bubble::before {
+  inset: 0;
+  backdrop-filter: blur(12px);
+  background-image: conic-gradient(from -25
+  deg at 80% 20%,
+  transparent 85%,
+  rgba(255, 255, 255, 0.7) 94%,
+  transparent 94%);
+  filter: blur(4px);
+}
+
+.bubble::after {
+  inset: -3px;
+  background: rgba(var(--bg--body-rgb), 0.2);
+  backdrop-filter: blur(3px);
+  z-index: -1;
+}
+
+@keyframes floating {
+  0%, 100%{
+      translate: 0;
+  }
+  50% {
+      translate: 0 var(--float-distance, -10px);
+  }
 }

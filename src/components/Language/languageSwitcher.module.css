@@ -4,6 +4,7 @@
 }
 
 .select {
+  text-align: center;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -18,9 +19,51 @@
   color: var(--softTextColor);
   border-radius: 12px;
   position: relative;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding-right: 30px
+
 }
 
 .select::-ms-expand {
   display: none;
+}
+
+.select::after {
+  content: '\25BC';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--softTextColor);
+  pointer-events: none; 
+}
+
+.select:hover {
+  border-color: #ccc; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
+.select:focus {
+  border-color: #0004ff; 
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); 
+}
+
+.select option {
+  background-color: #fff; 
+  color: #333; 
+  padding: 10px; 
+}
+
+
+.select option:hover,
+.select option:focus {
+  background-color: #f0f0f0; 
+  color: #007BFF; 
+}
+
+.select option:checked {
+  background-color: #007BFF; 
+  color: #fff; 
 }
