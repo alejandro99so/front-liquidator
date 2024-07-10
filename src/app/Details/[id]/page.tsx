@@ -106,7 +106,7 @@ const Page = () => {
                     <div className={styles.user}>
                         <Image src={"/icons/user.svg"} alt='user.svg' width={30} height={30} />
                         <span className={styles.address}>{formatWalletAddress(data?.userAddress!)}</span>
-                        <Image src={"/icons/message.svg"} alt='' width={20} height={20} />
+                        {/* <Image src={"/icons/message.svg"} alt='' width={20} height={20} /> */}
                     </div>
                 </div>
                 <div className={styles.inputGroup}>

@@ -1,21 +1,25 @@
 "use client"
 import PageContainer from '@/components/PageContainer/PageContainer';
 import styles from './pay.module.css';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import SelectModal from '@/components/Modal/selectModal/SelectModal';
-import InfoBankModal from '@/components/Modal/infoBankModal/InfoBankModal';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import Image from 'next/image';
 import { ButtonLink } from '@/components/Buttons/ButtonLink';
 import { ButtonAction } from '@/components/Buttons/ButtonAction';
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { networks, tokens } from '@/utils/networks';
 import useFormValidation from '@/hooks/useFormValidation';
 import useExchangeRate from '@/hooks/useExchangeRate';
 import fetchWithToken from '@/utils/fetchWithToken';
 import { FormState, BankDetails } from '../types';
+import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Loading/Spinner';
+import LoadingText from '@/components/Loading/LoadingSText/LoadingText';
+
+const SelectModal = lazy(() => import('@/components/Modal/selectModal/SelectModal'));
+const InfoBankModal = lazy(() => import('@/components/Modal/infoBankModal/InfoBankModal'));
 
 const PayPage = () => {
+    const router = useRouter();
     const { t } = useTranslation(['pay']);
 
     const [form, setForm] = useState<FormState>({
@@ -33,6 +37,7 @@ const PayPage = () => {
     const [isEditing, setIsEditing] = useState(true);
     const [joinCode, setJoinCode] = useState<string | null>(null);
     const [idTrxReq, setIdTrxReq] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [bankDetails, setBankDetails] = useState<BankDetails>({
         bankName: '',
         bankNumber: '',
@@ -102,20 +107,19 @@ const PayPage = () => {
     };
 
     const handleContinue = async () => {
-
         try {
             const { code, id } = await fetchWithToken('http://localhost:3000/room/request', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(paymentDetails)
             });
-            console.log({ paymentDetails });
 
             setJoinCode(code);
             setIdTrxReq(id);
             setIsEditing(false);
         } catch (error) {
             console.error('Payment failed:', error);
+            setLoading(false);
         }
     };
 
@@ -126,6 +130,7 @@ const PayPage = () => {
 
     const handlePay = async () => {
         try {
+            setLoading(true);
             const result = await fetchWithToken('http://localhost:3000/room/request-confirm', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -133,10 +138,74 @@ const PayPage = () => {
             });
             console.log('Payment successful:', result);
             setIsEditing(false);
+            setLoading(false);
+            router.push('/Building')
         } catch (error) {
             console.error('Payment failed:', error);
         }
     };
+
+
+    const [dollarP, setDollarP] = useState(0);
+    const [dollarRange, setDollarRange] = useState([0, 0, 0]);
+
+    const getPriceUsd = async () => {
+        console.log("here");
+        const request = await fetch(
+            "https://api.investing.com/api/financialdata/2112/historical/chart/?interval=PT5M&pointscount=60"
+        );
+        const prices = await request.json();
+        const latest = prices.data.slice(-10);
+        let sumPrice = 0;
+        for (let i = 0; i < 10; i++) {
+            for (let j = 1; j < 5; j++) {
+                sumPrice += latest[i][j];
+            }
+        }
+        const conversionRate = Math.floor(sumPrice / 400) * 10;
+        setDollarP(conversionRate);
+    };
+
+    useEffect(() => {
+        console.log("before here");
+        getPriceUsd();
+    }, []);
+
+    const getAmountToConvert = (valueSubs: number) => {
+        let value = 0;
+        if (dollarP) {
+            const copInput = document.getElementById("copAmount");
+            const usdInput = document.getElementById("usdAmount");
+            if (usdInput && copInput) {
+                value = Number((copInput.value / (dollarP - valueSubs)).toFixed(1));
+            }
+        }
+        return value;
+    };
+
+    const convertCurrency = () => {
+        const usdInput = document.getElementById("usdAmount");
+        if (usdInput) {
+            usdInput.value = getAmountToConvert(100);
+            setDollarRange([
+                getAmountToConvert(50),
+                getAmountToConvert(100),
+                getAmountToConvert(150),
+            ]);
+        }
+    };
+
+    const assignValue = (value: number) => {
+        const usdInput = document.getElementById("usdAmount");
+        if (usdInput) {
+            usdInput.value = value;
+        }
+    };
+
+    if (loading) {
+        return <LoadingText />
+    }
+
 
     return (
         <PageContainer>
@@ -170,13 +239,39 @@ const PayPage = () => {
                         <input
                             type="number"
                             name="total"
+                            id="copAmount"
                             value={form.total}
                             onChange={handleInputChange}
                             className={styles.totalInput}
                             required
                             disabled={!isEditing}
+                            min="20000"
+                            onInput={() => convertCurrency()}
                         />
                         <span className={`${styles.unit} ${!isEditing ? styles.disabled : ''}`}>COP</span>
+                    </div>
+                </div>
+                <div className={styles.trx_form_content}>
+                    <div
+                        className={styles.button_option_container}
+                        onClick={() => assignValue(dollarRange[0])}
+                    >
+                        <span>Poco probable</span>
+                        <div className={styles.button_option}>{dollarRange[0]}</div>
+                    </div>
+                    <div
+                        className={styles.button_option_container}
+                        onClick={() => assignValue(dollarRange[1])}
+                    >
+                        <span>Tárifa estándar</span>
+                        <div className={styles.button_option}>{dollarRange[1]}</div>
+                    </div>
+                    <div
+                        className={styles.button_option_container}
+                        onClick={() => assignValue(dollarRange[2])}
+                    >
+                        <span>Recomendado</span>
+                        <div className={styles.button_option}>{dollarRange[2]}</div>
                     </div>
                 </div>
                 <div>
@@ -184,9 +279,10 @@ const PayPage = () => {
                         <label>Total Token:</label>
                         <div className={`${styles.totalInputContainer} ${!isEditing ? styles.disabled : ''}`}>
                             <input
+                                id='usdAmount'
                                 type="number"
                                 name="totalToken"
-                                value={form.totalToken}
+                                value={dollarP}
                                 onChange={handleInputChange}
                                 className={styles.totalInput}
                                 required
@@ -195,12 +291,12 @@ const PayPage = () => {
                             <span className={`${styles.unit} ${!isEditing ? styles.disabled : ''}`}>{form.token}</span>
                         </div>
                     </div>
-                    {rate !== null && (
+                    {/* {rate !== null && (
                         <div className={styles.rateInfoContainer}>
                             <span className={styles.rateLabel}>Rate:</span>
-                            <span className={styles.rateValue}>{rate.toFixed(2)} COP</span>
+                            <span className={styles.rateValue}>{rate.toFixed(2)} COP / USD</span>
                         </div>
-                    )}
+                    )} */}
                 </div>
                 <div className={styles.inputGroup}>
                     <label>{t("method")}:</label>
@@ -298,15 +394,20 @@ const PayPage = () => {
                     <>
                         <div className={styles.containerButtons}>
                             <ButtonAction onClick={handleCancel} title={t("cancel")} color='#313131' />
+                            <button onClick={handlePay} >{t("pay")}</button>
                             <ButtonLink href="/Building" title={t("pay")} color='#1F046B' onClick={handlePay} />
                         </div>
                     </>
                 )}
                 {isModalOpen && form.method === 'qr' && (
-                    <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} onQrCodeDetected={handleQrCodeDetected} />
+                    <Suspense fallback={<Spinner />}>
+                        <SelectModal isOpen={isModalOpen} onClose={handleModalClose} onImageSelect={handleImageSelect} onQrCodeDetected={handleQrCodeDetected} />
+                    </Suspense>
                 )}
                 {isModalOpen && form.method === 'transfer' && (
-                    <InfoBankModal isOpen={isModalOpen} onClose={handleModalClose} />
+                    <Suspense fallback={<Spinner />}>
+                        <InfoBankModal isOpen={isModalOpen} onClose={handleModalClose} />
+                    </Suspense>
                 )}
             </div>
         </PageContainer>

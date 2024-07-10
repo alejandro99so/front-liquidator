@@ -14,11 +14,11 @@ const UpdateTotalToken: React.FC<UpdateTotalTokenModalProps> = ({ isOpen, initia
     const [rate, setRate] = useState(0);
 
     const increaseTotalToken = () => {
-        setRate((prev) => prev + 10);
+        setRate((prev) => prev + 0.10);
     }
 
     const decreaseTotalToken = () => {
-        setRate((prev) => prev - 10);
+        setRate((prev) => prev - 0.10);
     }
 
     useEffect(() => {
@@ -39,11 +39,11 @@ const UpdateTotalToken: React.FC<UpdateTotalTokenModalProps> = ({ isOpen, initia
                             readOnly
                             className={styles.totalInput}
                         />
-                        <span>COP</span>
+                        <span>USD</span>
                     </div>
                     <div className={styles.buttonsGroup}>
                         <button onClick={increaseTotalToken} className={styles.changeButton}>+</button>
-                        <span>10.00</span>
+                        <span>0.10</span>
                         <button onClick={decreaseTotalToken} className={styles.changeButton}>-</button>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './Loading.module.css'
-const Loading = () => {
+import styles from './Spinner.module.css'
+const Spinner = () => {
     return (
         <div className={styles.container}>
             <div className={styles.spinner}></div>
@@ -8,4 +8,4 @@ const Loading = () => {
     );
 };
 
-export default Loading;
+export default Spinner;

@@ -4,10 +4,10 @@ import styles from './liquidator.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Loading from '@/components/Loading/Loading'
 import { networks } from '@/utils/networks'
 import { TrxRequest } from "@/app/types"
 import { formatWalletAddress } from "@/utils/formatWalletAddress"
+import Spinner from '@/components/Loading/Spinner'
 
 const LiquidatorPage = () => {
     const [trxs, setTrxs] = useState<TrxRequest[]>([]);
@@ -57,7 +57,7 @@ const LiquidatorPage = () => {
     }, []);
 
     if (loading) {
-        return <Loading />;
+        return <Spinner />;
     }
 
     if (error) {

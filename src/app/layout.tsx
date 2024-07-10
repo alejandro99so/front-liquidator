@@ -11,6 +11,8 @@ import { ThemeContextProvider } from '@/context/ThemeContext'
 import ThemeProvider from '@/providers/ThemeProvider'
 import ThemeSwitcher from '@/components/themeSwitcher/ThemeSwitcher'
 import { Footer } from '@/components/Footer/Footer'
+import useCheckSignData from '@/hooks/useCheckSignData'
+import ClientWrapper from '@/components/ClientWrapper'
 
 export const metadata: Metadata = {
   title: 'BucksPay',
@@ -31,7 +33,9 @@ export default function RootLayout({
             <div className='containerMain'>
               <Header />
               <main>
-                <Web3ModalProvider initialState={initialState}>{children}</Web3ModalProvider>
+                <ClientWrapper>
+                  <Web3ModalProvider initialState={initialState}>{children}</Web3ModalProvider>
+                </ClientWrapper>
               </main>
               <Footer />
               <ThemeSwitcher />

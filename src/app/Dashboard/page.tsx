@@ -14,7 +14,6 @@ import esDataRandom from "../../../public/locales/es/data-random.json"
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
 
-
 const DashboardPage = () => {
     const [nowSign, setNowSign] = useState(0)
     const { data: signMessageData, error: errorSigningMessage, signMessage } = useSignMessage()
@@ -23,27 +22,34 @@ const DashboardPage = () => {
     const account = useAccount();
     const [currentPhrase, setCurrentPhrase] = useState("");
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+    const [connected, setConnected] = useState<boolean>(false)
     const { t } = useTranslation(['home', 'data-random'])
-
     const router = useRouter();
 
     useEffect(() => {
         const checkSession = async () => {
             const jwt = sessionStorage.getItem("jwt");
-            if (!jwt) {
-                router.push('/Dashboard');
+            const IsSignData = sessionStorage.getItem("IsSignData");
+            if (IsSignData === "true") {
+                setConnected(true)
             } else {
-                try {
-                    const { payload } = await jose.jwtVerify(jwt, secret);
-                    if (payload.exp! < Math.floor(Date.now() / 1000)) {
+                setConnected(false);
+                if (!jwt) {
+                    router.push('/Dashboard');
+                } else {
+                    try {
+                        const { payload } = await jose.jwtVerify(jwt, secret);
+                        if (payload.exp! < Math.floor(Date.now() / 1000)) {
+                            sessionStorage.removeItem("jwt");
+                            router.push('/Dashboard');
+                        }
+                    } catch (ex) {
                         sessionStorage.removeItem("jwt");
                         router.push('/Dashboard');
                     }
-                } catch (ex) {
-                    sessionStorage.removeItem("jwt");
-                    router.push('/Dashboard');
                 }
             }
+
         };
         checkSession();
     }, [router]);
@@ -66,11 +72,10 @@ const DashboardPage = () => {
         const jwt = sessionStorage.getItem("jwt")
         const now = Math.floor(Date.now() / 1000)
         if (jwt) {
-
             try {
                 const { payload } = await jose.jwtVerify(jwt, secret);
                 sessionStorage.setItem("address", String(payload.address))
-                if (payload.address == connections[0].accounts[0] && Number(payload.exp) < now) {
+                if (payload.address == connections[0].accounts[0] && Number(payload.exp) > now) {
                     return
                 }
             } catch (ex: any) {
@@ -93,7 +98,7 @@ const DashboardPage = () => {
         if (connections.length && connections[0].accounts.length) {
             console.log(connections[0].accounts[0])
             validateSession()
-            console.log("Conntect?: ", connections[0].connector.onConnect)
+            console.log("Connect?: ", connections[0].connector.onConnect)
         }
     }, [connections])
 
@@ -113,6 +118,15 @@ const DashboardPage = () => {
             console.log({ request: await request.json() })
         }
     }
+
+    useEffect(() => {
+        console.log({ account });
+        if (account.address && signMessageData) {
+            console.log({ signMessageData, account: account.address })
+            sessionStorage.setItem('IsSignData', "true");
+            setConnected(true)
+        }
+    }, [account, signMessageData]);
 
     useEffect(() => {
         if (signMessageData && jose) {
@@ -141,24 +155,30 @@ const DashboardPage = () => {
                 console.log("IS_NOT_POSIBLE_CONTINUE_WITHOUT_SIGN")
             }
             disconnect(config)
+            sessionStorage.setItem('IsSignData', "false");
             console.log({ errorSigningMessage })
         }
     }, [errorSigningMessage])
 
     return (
         <PageContainer>
-            <h1 className={styles.title}>{t("loginus")}</h1>
             <p className={styles.currentPhrase}>{currentPhrase}</p>
-            <div className={styles.containerButtons}>
-                <Link className={`${styles.button} ${styles.buttonUser}`} href="/User">
-                    {t("buttonUser")}
-                </Link>
-                <Link className={`${styles.button} ${styles.buttonLiquidator}`} href="/Liquidator">
-                    {t("buttonLiquidator")}
-                </Link>
-            </div>
+            {connected == true ? (
+                <div className={styles.containerButtons}>
+                    <Link className={`${styles.button} ${styles.buttonUser}`} href="/User">
+                        {t("buttonUser")}
+                    </Link>
+                    <Link className={`${styles.button} ${styles.buttonLiquidator}`} href="/Liquidator">
+                        {t("buttonLiquidator")}
+                    </Link>
+                </div>
+            ) : (
+                <div>
+                    <w3m-button />
+                </div>
+            )}
         </PageContainer>
     );
-}
+};
 
 export default DashboardPage;
