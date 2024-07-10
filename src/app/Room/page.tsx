@@ -5,25 +5,27 @@ import styles from "./room.module.css";
 import PageContainer from "@/components/PageContainer/PageContainer";
 import Image from "next/image";
 
-const Hola: React.FC = () => {
+const Room: React.FC = () => {
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [sortedMessages, setSortedMessages] = useState([] as any[]);
 
   const getMessages = async (_token: string, _user?: string) => {
-    const request = await fetch(`http://localhost:3000/chat/messages?trxId=6681c3c7cdc3e9e47e1c18bf`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization:
-          `bearer ${_token}`,
-      },
-    });
+    const request = await fetch(
+      `http://localhost:3000/chat/messages?trxId=6681c3c7cdc3e9e47e1c18bf`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${_token}`,
+        },
+      }
+    );
     if (request) {
       const data = await request.json();
       console.log({ request: data });
       createMessages(data.chat, _user);
     }
-  }
+  };
 
   useEffect(() => {
     const _user = String(sessionStorage.getItem("address"));
@@ -88,8 +90,7 @@ const Hola: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization:
-            `bearer ${token}`,
+          authorization: `bearer ${token}`,
         },
         body: JSON.stringify({
           message,
@@ -151,12 +152,16 @@ const Hola: React.FC = () => {
         <div className={styles.chatWindow}>
           {sortedMessages.map((item, index) => (
             <div
-              className={item.side == "r" ? styles.content_right : styles.content_left}
+              className={
+                item.side == "r" ? styles.content_right : styles.content_left
+              }
               key={index}
             >
               <Image src={"/user.svg"} alt="" width={30} height={30} />
               <div
-                className={item.side == "r" ? styles.text_right : styles.text_left}
+                className={
+                  item.side == "r" ? styles.text_right : styles.text_left
+                }
               >
                 <span className={styles.message}>{item.message}</span>
                 <span className={styles.time}>{formatTime(item.time)}</span>
@@ -165,7 +170,12 @@ const Hola: React.FC = () => {
           ))}
         </div>
         <form onSubmit={sendMessage} className={styles.messageForm}>
-          <input type="text" name="message" className={styles.messageInput} placeholder="Type your message..." />
+          <input
+            type="text"
+            name="message"
+            className={styles.messageInput}
+            placeholder="Type your message..."
+          />
           <button type="submit" className={styles.sendButton}>
             <Image src={"/send.svg"} alt="" width={30} height={30} />
           </button>
@@ -175,4 +185,4 @@ const Hola: React.FC = () => {
   );
 };
 
-export default Hola;
+export default Room;

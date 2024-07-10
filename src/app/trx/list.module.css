@@ -1,0 +1,8 @@
+.list_container {
+  max-width: 20rem;
+}
+
+.list_container_element {
+  width: 1.5rem;
+  height: 1.5rem;
+}
