@@ -19,8 +19,6 @@
   overflow: hidden;
 }
 
-
-
 .content {
   position: relative;
   z-index: 1;
@@ -122,40 +120,44 @@
 }
 
 @media (max-width: 768px) {
+  .servicesSection {
+    padding: 50px 0;
+  }
+
   .content h2 {
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 36px;
+    line-height: 40px;
     width: 90%;
   }
-  
+
   .viewServicesButton {
     width: auto;
     max-width: 80%;
     font-size: 18px;
   }
-  
+
   .servicesContainer {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .servicesContainer img {
     width: 100%;
     height: auto;
   }
-  
+
   .servicesContainerTitle {
     font-size: 28px;
     padding: 10px;
     top: 10px;
   }
-  
+
   .servicesContainerSubtitle {
-    font-size: 16px;
+    font-size: 14px;
     padding: 10px;
-    bottom: 10px;
-    left: 10px;
-    width: auto;
-    text-align: center;
+    bottom: 0px;
+    left: 132px;
+    width: 50%;
+    text-align: end;
   }
 }

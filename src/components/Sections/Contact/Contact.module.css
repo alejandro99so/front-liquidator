@@ -81,7 +81,6 @@
   color: #ffffff;
   text-align: start;
   margin-bottom: 5px;
-  
 }
 
 .formGroup input[type="text"],
@@ -97,7 +96,7 @@
 .formGroup input[type="text"]:focus,
 .formGroup input[type="email"]:focus,
 .formGroup textarea:focus {
-  border-color: #007BFF; 
+  border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
 }
@@ -125,9 +124,30 @@
 .submitButton:hover {
   transform: scale(1.05);
   transition: transform 0.9s ease, background-color 0.3s ease;
-  background-color: #6780FF;
+  background-color: #6780ff;
 }
 
 .submitButton:active {
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 50px 0;
+  }
+  .contactSection h2 {
+    font-size: 36px;
+  }
+  .contactSection p {
+    font-size: 20px;
+    width: 85%;
+  }
+
+  .contactForm {
+    width: 90%;
+  }
+  /* 
+  .leftPanel {
+    display: none;
+  } */
 }

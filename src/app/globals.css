@@ -40,7 +40,7 @@
   --circle1Color: rgba(30, 0, 255, 0.63);
   --circle2Color: rgba(0, 255, 157, 0.733);
   --circle3Color: rgba(0, 38, 255, 0.726);
-  --viewServicesButtonHover: #6780FF;
+  --viewServicesButtonHover: #6780ff;
   --linkHover: #6780ff31;
   --viewServicesButton: black;
   --bubble1Variant1: #0000ff00;
@@ -69,7 +69,6 @@ body {
   align-items: center;
   min-height: 100vh;
   position: relative;
-  padding-top: 100px;
   box-sizing: border-box;
   background-color: var(--softBg);
   color: var(--softTextColor);
@@ -96,10 +95,4 @@ main {
 } */
 
 @media (width < 1070px) {
-  .containerMain {
-    background-color: blue;
-    /* padding-left: 20px;
-    padding-right: 20px; */
-  }
 }
-

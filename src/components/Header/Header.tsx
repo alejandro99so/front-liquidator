@@ -19,7 +19,7 @@ export const Header = () => {
             <Link href={"/"} className={styles.logo}>
                 <Logo />
             </Link>
-            
+
             <div className={`${styles.menu} ${menuOpen ? styles.menuOpen : ""}`}>
                 {pathname === "/" && (
                     <ul className={styles.menuList}>
@@ -41,15 +41,15 @@ export const Header = () => {
                     </ul>
                 )}
             </div>
-            <div className={styles.botones}>
-                <div className={styles.button}>
-                    <LanguageSwitcher />
-                    <w3m-button />
+            <div className={styles.containerButtons}>
+                <div className={`${styles.button} ${menuOpen ? styles.menuOpen : ""}`}>
+                    <div className={styles.botones}>
+                        <LanguageSwitcher />
+                    </div>
                 </div>
-                <button className={styles.hamburger } onClick={toggleMenu}>X</button>
+                <w3m-button />
+                <button className={styles.hamburger} onClick={toggleMenu}>X</button>
             </div>
         </header>
     );
 }
-// export default Header;
-// export default Header;

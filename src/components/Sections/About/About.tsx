@@ -13,19 +13,19 @@ const AboutSection: React.FC = () => {
             <p>{t("aboutSection.description")}</p>
             <div className={styles.imagesContainer}>
                 <div className={styles.imageBox}>
-                    <Image src="/background/Security.png" alt="Security" width={280} height={490} />
+                    <Image className={styles.img} src="/background/Security.png" alt="Security" width={280} height={490} />
                     <span className={styles.imageLabel}>{t("aboutSection.imageDescriptions.security")}</span>
                 </div>
                 <div className={styles.imageBox}>
-                    <Image src="/background/Speed.png" alt="Speed" width={280} height={490} />
+                    <Image className={styles.img} src="/background/Speed.png" alt="Speed" width={280} height={490} />
                     <span className={styles.imageLabel}>{t("aboutSection.imageDescriptions.speed")}</span>
                 </div>
                 <div className={styles.imageBox}>
-                    <Image src="/background/Efficiency.png" alt="Efficiency" width={280} height={490} />
+                    <Image className={styles.img} src="/background/Efficiency.png" alt="Efficiency" width={280} height={490} />
                     <span className={styles.imageLabel}>{t("aboutSection.imageDescriptions.efficiency")}</span>
                 </div>
             </div>
-            
+
         </section>
     )
 }
