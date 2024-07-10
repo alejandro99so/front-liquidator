@@ -267,3 +267,63 @@
     justify-content: space-evenly;
   }
 }
+
+
+/* Mobile */
+@media (max-width: 440px) {
+  .heroSection {
+    height: auto;
+    padding: 20px 0;
+  }
+  .content {
+    right: 0;
+    top: 0;
+    text-align: center;
+  }
+  .content h1 {
+    font-size: 25px;
+  }
+  .paragraphContainer {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+  }
+
+  .paragraphContainer span {
+    width: 10%;
+    height: 0.1px;
+  }
+
+  .paragraphContainer p {
+    width: 75%;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  .buttonInfoContainer {
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+  }
+  .viewServicesButton {
+    width: 33%;
+    margin-bottom: 20px;
+    font-size: 12px;
+  }
+
+  .infoBox {
+    position: static;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .cryptoInfo {
+    justify-content: space-evenly;
+  }
+
+  #circle,
+  #circle2,
+  #circle3 {
+    animation: static;
+  }
+}

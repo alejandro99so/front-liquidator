@@ -119,6 +119,8 @@
   }
 }
 
+
+/* Tablet  */ 
 @media (max-width: 768px) {
   .servicesSection {
     padding: 50px 0;
@@ -157,6 +159,51 @@
     padding: 10px;
     bottom: 0px;
     left: 132px;
+    width: 50%;
+    text-align: end;
+  }
+}
+
+
+/* Mobile */
+@media (max-width: 440px) {
+  .servicesSection {
+    padding: 50px 0;
+  }
+
+  .content h2 {
+    font-size: 25px;
+    line-height: 30px;
+    width: 90%;
+  }
+
+  .viewServicesButton {
+    width: auto;
+    max-width: 80%;
+    font-size: 14px;
+  }
+
+  .servicesContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .servicesContainer img {
+    width: 90%;
+    height: auto;
+  }
+
+  .servicesContainerTitle {
+    font-size: 18px;
+    padding: 0px;
+    top: 10px;
+  }
+
+  .servicesContainerSubtitle {
+    font-size: 13px;
+    padding: 3px;
+    bottom: 0px;
+    left: 98px;
     width: 50%;
     text-align: end;
   }

@@ -141,6 +141,8 @@
   }
 }
 
+
+/* Tablet */
 @media (max-width: 768px) {
   .aboutUsSection {
     padding: 50px 20px;
@@ -169,3 +171,40 @@
     font-size: 22px;
   }
 }
+
+
+/* Mobile */
+@media (max-width: 440px) {
+  .aboutUsSection {
+    padding: 50px 20px;
+    position: relative;
+    background-color: var(--softBg);
+  }
+
+  .aboutUsSection h2 {
+    font-size: 36px;
+  }
+
+  .aboutUsSection p {
+    font-size: 20px;
+  }
+
+  .bubble1 {
+    left: 70%;
+  }
+
+  .img {
+    width: 200px;
+    height: 300px;
+  }
+
+  .imageLabel {
+    font-size: 22px;
+  }
+
+  .bubble {
+    display: none;
+  }
+}
+
+

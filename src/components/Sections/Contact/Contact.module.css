@@ -146,8 +146,27 @@
   .contactForm {
     width: 90%;
   }
-  /* 
+
+}
+
+/* Mobile */
+@media (max-width: 440px) {
+  .contactSection {
+    padding: 50px 0;
+  }
+  .contactSection h2 {
+    font-size: 36px;
+  }
+  .contactSection p {
+    font-size: 20px;
+    width: 85%;
+  }
+
+  .contactForm {
+    width: 90%;
+  }
+
   .leftPanel {
     display: none;
-  } */
+  } 
 }
