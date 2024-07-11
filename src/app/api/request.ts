@@ -1,3 +1,4 @@
+import { bucksPost } from "@/utils/fetchWithToken";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const request = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -13,15 +14,7 @@ const request = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/room/request", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(req.body),
-    });
-
+    const response = await bucksPost("room/request", req.body);
     console.log("Response status:", response.status);
 
     const contentType = response.headers.get("content-type");

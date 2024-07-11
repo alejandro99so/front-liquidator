@@ -4,33 +4,29 @@ import Pusher from "pusher-js";
 import styles from "./room.module.css";
 import PageContainer from "@/components/PageContainer/PageContainer";
 import Image from "next/image";
+import { bucksGet, bucksPost } from "@/utils/fetchWithToken";
 
 const Hola: React.FC = () => {
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [sortedMessages, setSortedMessages] = useState([] as any[]);
+  const [payerAddress, setPayerAddress] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+  const [trxId, setTrxId] = useState("");
 
-  const getMessages = async (_token: string, _user?: string) => {
-    const request = await fetch(`http://localhost:3000/chat/messages?trxId=6681c3c7cdc3e9e47e1c18bf`, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization:
-          `bearer ${_token}`,
-      },
-    });
+  const getMessages = async (_token: string, trxId: string, _user?: string) => {
+    const request = await bucksGet("chat/messages");
     if (request) {
-      const data = await request.json();
-      console.log({ request: data });
-      createMessages(data.chat, _user);
+      createMessages(request.chat, _user);
     }
-  }
+  };
 
   useEffect(() => {
     const _user = String(sessionStorage.getItem("address"));
     const _token = String(sessionStorage.getItem("jwt"));
     setUser(_user);
     setToken(_token);
-    getMessages(_token, _user);
+    getMessages(_token, "6681c3c7cdc3e9e47e1c18bf", _user);
   }, []);
 
   const createMessages = (data: any, _user: string | null = null) => {
@@ -38,7 +34,8 @@ const Hola: React.FC = () => {
     let side1;
     let side2;
     console.log({ data });
-    const localUser = _user ?? user;
+    const localUser = (_user ?? user).toLowerCase();
+    console.log({ localUser, data });
     if (data.user == localUser) {
       side1 = "l";
       side2 = "r";
@@ -64,17 +61,19 @@ const Hola: React.FC = () => {
     }
     const _sortedMessages = messages.sort((a, b) => a.time - b.time);
     console.log(_sortedMessages);
-
+    setPayerAddress(data.payer);
+    setUserAddress(data.user);
+    setTrxId(data.trxId);
     setSortedMessages(_sortedMessages);
+    var channel = _pusher.subscribe(`${data?.code}_liquidator`);
+    channel.bind(data.trxId, (data: any) => {
+      console.log({ data });
+      createMessages(data.chat);
+    });
   };
 
   var _pusher = new Pusher(String(process.env.NEXT_PUBLIC_PUSHER_API_KEY), {
     cluster: String(process.env.NEXT_PUBLIC_PUSHER_CLUSTER),
-  });
-  var channel = _pusher.subscribe("room-5");
-  channel.bind("6681c3c7cdc3e9e47e1c18bf", (data: any) => {
-    console.log({ data });
-    createMessages(data.chat);
   });
 
   console.log("here");
@@ -84,23 +83,13 @@ const Hola: React.FC = () => {
     const message = e.target[0].value;
     console.log({ message });
     try {
-      const request = await fetch("http://localhost:3000/chat/create-message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization:
-            `bearer ${token}`,
-        },
-        body: JSON.stringify({
-          message,
-          trxId: "6681c3c7cdc3e9e47e1c18bf",
-          to:
-            user != "0x42068fB31B77215295bc83b16342B65ed839Fb8a"
-              ? "0x42068fB31B77215295bc83b16342B65ed839Fb8a"
-              : "0xA44b296de9cB799B5d6d93294577B06be1E7f2bC",
-          from: user,
-        }),
-      });
+      const dataToSend = {
+        message,
+        trxId,
+        to: user != userAddress ? userAddress : payerAddress,
+        from: user,
+      };
+      const request = await bucksPost("chat/create-message", dataToSend);
       if (request) {
         console.log({ request: await request.json() });
       }
@@ -151,12 +140,16 @@ const Hola: React.FC = () => {
         <div className={styles.chatWindow}>
           {sortedMessages.map((item, index) => (
             <div
-              className={item.side == "r" ? styles.content_right : styles.content_left}
+              className={
+                item.side == "r" ? styles.content_right : styles.content_left
+              }
               key={index}
             >
               <Image src={"/user.svg"} alt="" width={30} height={30} />
               <div
-                className={item.side == "r" ? styles.text_right : styles.text_left}
+                className={
+                  item.side == "r" ? styles.text_right : styles.text_left
+                }
               >
                 <span className={styles.message}>{item.message}</span>
                 <span className={styles.time}>{formatTime(item.time)}</span>
@@ -165,7 +158,12 @@ const Hola: React.FC = () => {
           ))}
         </div>
         <form onSubmit={sendMessage} className={styles.messageForm}>
-          <input type="text" name="message" className={styles.messageInput} placeholder="Type your message..." />
+          <input
+            type="text"
+            name="message"
+            className={styles.messageInput}
+            placeholder="Type your message..."
+          />
           <button type="submit" className={styles.sendButton}>
             <Image src={"/send.svg"} alt="" width={30} height={30} />
           </button>

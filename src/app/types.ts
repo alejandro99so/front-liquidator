@@ -20,6 +20,7 @@ export type TrxRequest = {
   usd: string;
   cop: string;
   cryptoCurrency: string;
+  code: string;
 };
 
 export type Details = FormState &

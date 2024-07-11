@@ -1,3 +1,4 @@
+import { FormState } from "@/app/types";
 import { useState, useEffect } from "react";
 
 const useExchangeRate = (form: FormState) => {
