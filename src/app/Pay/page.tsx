@@ -92,6 +92,7 @@ const PayPage = () => {
       console.log(dataWrite);
       if (stateContract == 1) {
         console.log("Llamando contrato liquidator");
+        setTextLoading("Estamos procesando tu transacción ...");
         setStateContract(2);
         setTimeout(() => {
           writeContract({
