@@ -139,7 +139,7 @@ const Page = () => {
   };
 
   const redirectChat = async () => {
-    const trx = await bucksPatch("room/confirm");
+    const trx = await bucksPatch("room/confirm?status=STARTED");
     if (trx && trx._id) {
       setTimeout(() => {
         router.push("/Room");
